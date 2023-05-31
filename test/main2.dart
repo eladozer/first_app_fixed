@@ -5,7 +5,13 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:web_socket_channel/io.dart';
 import 'dart:async';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'handle_csv.dart' as cs;
+import '../lib/others/handle_csv.dart' as cs;
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
+
+String generateMd5(String input) {
+  return md5.convert(utf8.encode(input)).toString();
+}
 
 String url = "https://api.api-ninjas.com/v1/nutrition?query=";
 var key = "Key1986";
@@ -31,7 +37,6 @@ class FoodData extends StatefulWidget {
 }
 
 class FoodDataState extends State<FoodData> {
-  var _activeChannel;
   User user = User("", 0, 0, 0, 0, 0, "", "", "", "", 0, 0, 0, 0, 0, 0);
   @override
   void initState() {
@@ -65,6 +70,7 @@ class FoodDataState extends State<FoodData> {
           'CaloCalc - Food Data',
           style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
         ),
+        backgroundColor: Colors.cyan,
         automaticallyImplyLeading: false,
       ),
       body: Table(
@@ -176,13 +182,12 @@ class MyApp extends StatefulWidget {
   }
 }
 
-class MyAppState extends State<MyApp> {
+class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   User user = User("", 0, 0, 0, 0, 0, "", "", "", "", 0, 0, 0, 0, 0, 0);
   var _mainChannel;
   var mealChannel;
   var meal_data;
   final control = TextEditingController();
-
   @override
   void initState() {
     super.initState();
@@ -255,7 +260,9 @@ class MyAppState extends State<MyApp> {
               width: 45,
               child: CircularProgressIndicator(
                 value: user.current_cal / user.cal,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                valueColor: user.current_cal / user.cal >= 1
+                    ? AlwaysStoppedAnimation<Color>(Colors.green)
+                    : AlwaysStoppedAnimation(Colors.white),
               ),
             ),
             Text(
@@ -277,7 +284,9 @@ class MyAppState extends State<MyApp> {
                 width: 45,
                 child: CircularProgressIndicator(
                   value: user.current_prot / user.prot,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  valueColor: user.current_prot / user.prot >= 1
+                      ? AlwaysStoppedAnimation<Color>(Colors.green)
+                      : AlwaysStoppedAnimation(Colors.white),
                 ),
               ),
               Text(
@@ -297,148 +306,151 @@ class MyAppState extends State<MyApp> {
           style: TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold),
         ),
       ),
-      body: Table(
-        columnWidths: {
-          0: FractionColumnWidth(0.2),
-          1: FractionColumnWidth(0.3),
-          2: FractionColumnWidth(0.2),
-          3: FractionColumnWidth(0.3),
-        },
-        border: TableBorder.all(
-          color: Colors.black,
-          width: 3.0,
-          style: BorderStyle.solid,
-        ),
-        children: [
-          TableRow(
-            children: [
-              TableCell(
-                child: Text(
-                  'Time',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-              TableCell(
-                child: Text(
-                  'Meal Name',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-              TableCell(
-                child: Text(
-                  'Calories',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-              TableCell(
-                child: Text(
-                  'Proteins',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-            ],
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Table(
+          columnWidths: {
+            0: FractionColumnWidth(0.2),
+            1: FractionColumnWidth(0.3),
+            2: FractionColumnWidth(0.2),
+            3: FractionColumnWidth(0.3),
+          },
+          border: TableBorder.all(
+            color: Colors.black,
+            width: 3.0,
+            style: BorderStyle.solid,
           ),
-          ...List<TableRow>.generate(
-            meals.length,
-            (index) {
-              if (meals[index].isNotEmpty) {
-                return TableRow(
-                  children: [
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(2.0),
-                        child: Text(
-                          meals[index].split("-")[0].toString(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+          children: [
+            TableRow(
+              children: [
+                TableCell(
+                  child: Text(
+                    'Time',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                TableCell(
+                  child: Text(
+                    'Meal Name',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                TableCell(
+                  child: Text(
+                    'Calories',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                TableCell(
+                  child: Text(
+                    'Proteins',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            ...List<TableRow>.generate(
+              meals.length,
+              (index) {
+                if (meals[index].isNotEmpty) {
+                  return TableRow(
+                    children: [
+                      TableCell(
+                        child: Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: Text(
+                            meals[index].split("-")[0].toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(2.0),
-                        child: Text(
-                          meals[index].split("-")[1].toString(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                      TableCell(
+                        child: Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: Text(
+                            meals[index].split("-")[1].toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(2.0),
-                        child: Text(
-                          meals[index].split("-")[2].toString(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                      TableCell(
+                        child: Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: Text(
+                            meals[index].split("-")[2].toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(2.0),
-                        child: Text(
-                          meals[index].split("-")[3].toString(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                      TableCell(
+                        child: Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: Text(
+                            meals[index].split("-")[3].toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                );
-              } else {
-                return TableRow(
-                  children: [
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(2.0),
-                        child: Text(
-                          meals[index],
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                    ],
+                  );
+                } else {
+                  return TableRow(
+                    children: [
+                      TableCell(
+                        child: Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: Text(
+                            meals[index],
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(2.0),
-                        child: Text(
-                          meals[index],
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                      TableCell(
+                        child: Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: Text(
+                            meals[index],
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(2.0),
-                        child: Text(
-                          meals[index],
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                      TableCell(
+                        child: Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: Text(
+                            meals[index],
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(2.0),
-                        child: Text(
-                          meals[index],
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                      TableCell(
+                        child: Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: Text(
+                            meals[index],
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                );
-              }
-            },
-          )
-        ],
+                    ],
+                  );
+                }
+              },
+            )
+          ],
+        ),
       ),
       floatingActionButton: Align(
         alignment: Alignment.bottomCenter,
@@ -458,10 +470,24 @@ class MyAppState extends State<MyApp> {
               for (int i = 0; i < list.length; i++) {
                 mealChannel = IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                 var item = list[i];
-                String prompt = url + item;
+                String changed = "";
+                if (item.split(" ")[0].contains("gr")) {
+                  changed = item.split(" ")[0].replaceAll("gr", "g") +
+                      " " +
+                      item.split(" ")[1];
+                }
+                print(changed);
+                item = changed;
+                if (item[0] == " ") {
+                  String prompt = url + item.substring(1);
+                  mealChannel.sink.add(xor_dec_enc(
+                      "Food," + user.name + "," + prompt.toString()));
+                } else {
+                  String prompt = url + item;
+                  mealChannel.sink.add(xor_dec_enc(
+                      "Food," + user.name + "," + prompt.toString()));
+                }
                 var sub1;
-                mealChannel.sink.add(
-                    xor_dec_enc("Food," + user.name + "," + prompt.toString()));
                 sub1 = mealChannel.stream.listen(
                   (msg) {
                     print("Message Recieved: $msg");
@@ -605,6 +631,7 @@ class LoginState extends State<Login> {
           'CaloCalc - Login',
           style: TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold),
         ),
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -667,7 +694,8 @@ class LoginState extends State<Login> {
                   _LogChannel =
                       IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                   var sub;
-                  String message = "Login,${control.text},${ctrl.text}";
+                  String message =
+                      "Login,${control.text},${generateMd5(ctrl.text)}";
                   _LogChannel.sink.add(xor_dec_enc(message));
                   sub = _LogChannel.stream.listen(
                     (msg) {
@@ -897,96 +925,101 @@ class RegState extends State<Register> {
             ),
             ElevatedButton(
               onPressed: () {
-                var channel = IOWebSocketChannel.connect("ws://10.0.0.8:8820");
-                String msg = "In User,${control.text}";
-                channel.sink.add(xor_dec_enc(msg));
-                channel.stream.listen(
-                  (message1) {
-                    String msg = xor_dec_enc(message1);
-                    if (msg == "False") {
-                      if (!isNumeric(cntl.text) ||
-                          !isNumeric(control2.text) ||
-                          !isNumeric(ctrl2.text) ||
-                          !isNumeric(ctrl1.text)) {
-                      } else if (int.parse(cntl.text) == 0 ||
-                          int.parse(control2.text) == 0 ||
-                          int.parse(ctrl2.text) == 0 ||
-                          int.parse(ctrl1.text) == 0) {
+                if (control.text == " ") {
+                } else {
+                  var channel =
+                      IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                  String msg = "In User,${control.text}";
+                  channel.sink.add(xor_dec_enc(msg));
+                  channel.stream.listen(
+                    (message1) {
+                      String msg = xor_dec_enc(message1);
+                      if (msg == "False") {
+                        if (!isNumeric(cntl.text) ||
+                            !isNumeric(control2.text) ||
+                            !isNumeric(ctrl2.text) ||
+                            !isNumeric(ctrl1.text)) {
+                        } else if (int.parse(cntl.text) == 0 ||
+                            int.parse(control2.text) == 0 ||
+                            int.parse(ctrl2.text) == 0 ||
+                            int.parse(ctrl1.text) == 0) {
+                        } else {
+                          _regChannel =
+                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                          String message =
+                              "Register,${control.text},${generateMd5(ctrl.text)},${cntl.text},${control2.text},${ctrl2.text},${ctrl1.text}";
+                          _regChannel.sink.add(xor_dec_enc(message));
+                          User u1 = new User(
+                              control.text,
+                              double.parse(cntl.text),
+                              int.parse(control2.text),
+                              int.parse(ctrl2.text),
+                              0,
+                              0,
+                              cntl.text + "/" + (DateTime.now()).toString(),
+                              "",
+                              "",
+                              "",
+                              int.parse(ctrl1.text),
+                              0,
+                              0,
+                              0,
+                              0,
+                              0);
+                          var sub;
+                          sub = _regChannel.stream.listen(
+                            (msg) {
+                              if (xor_dec_enc(msg).toLowerCase() == "no") {
+                                sub.cancel();
+                                _regChannel.sink.close();
+                                return;
+                              } else {
+                                sub.cancel();
+                                _regChannel.sink.close();
+                                Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder: (context, animation,
+                                            secondaryAnimation) =>
+                                        BottomNavi(u1),
+                                    transitionsBuilder: (context, animation,
+                                        secondaryAnimation, child) {
+                                      var begin = Offset(1.0, 0.0);
+                                      var end = Offset.zero;
+                                      var curve = Curves.ease;
+
+                                      var tween = Tween(begin: begin, end: end)
+                                          .chain(CurveTween(curve: curve));
+
+                                      return SlideTransition(
+                                        position: animation.drive(tween),
+                                        child: child,
+                                      );
+                                    },
+                                  ),
+                                );
+                              }
+                            },
+                          );
+                        }
                       } else {
-                        _regChannel =
-                            IOWebSocketChannel.connect("ws://10.0.0.8:8820");
-                        String message =
-                            "Register,${control.text},${ctrl.text},${cntl.text},${control2.text},${ctrl2.text},${ctrl1.text}";
-                        _regChannel.sink.add(xor_dec_enc(message));
-                        User u1 = new User(
-                            control.text,
-                            double.parse(cntl.text),
-                            int.parse(control2.text),
-                            int.parse(ctrl2.text),
-                            0,
-                            0,
-                            cntl.text + "/" + (DateTime.now()).toString(),
-                            "",
-                            "",
-                            "",
-                            int.parse(ctrl1.text),
-                            0,
-                            0,
-                            0,
-                            0,
-                            0);
-                        var sub;
-                        sub = _regChannel.stream.listen(
-                          (msg) {
-                            if (xor_dec_enc(msg).toLowerCase() == "no") {
-                              sub.cancel();
-                              _regChannel.sink.close();
-                              return;
-                            } else {
-                              sub.cancel();
-                              _regChannel.sink.close();
-                              Navigator.push(
-                                context,
-                                PageRouteBuilder(
-                                  pageBuilder: (context, animation,
-                                          secondaryAnimation) =>
-                                      BottomNavi(u1),
-                                  transitionsBuilder: (context, animation,
-                                      secondaryAnimation, child) {
-                                    var begin = Offset(1.0, 0.0);
-                                    var end = Offset.zero;
-                                    var curve = Curves.ease;
-
-                                    var tween = Tween(begin: begin, end: end)
-                                        .chain(CurveTween(curve: curve));
-
-                                    return SlideTransition(
-                                      position: animation.drive(tween),
-                                      child: child,
-                                    );
-                                  },
-                                ),
-                              );
-                            }
+                        print("In User");
+                        setState(
+                          () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content:
+                                    Text('Cant Register An Exisiting User'),
+                                duration: Duration(seconds: 3),
+                              ),
+                            );
                           },
                         );
                       }
-                    } else {
-                      print("In User");
-                      setState(
-                        () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Cant Register An Exisiting User'),
-                              duration: Duration(seconds: 3),
-                            ),
-                          );
-                        },
-                      );
-                    }
-                    channel.sink.close();
-                  },
-                );
+                      channel.sink.close();
+                    },
+                  );
+                }
               },
               child: Text("Register"),
             ),
@@ -1016,7 +1049,6 @@ class WeightGraph extends StatefulWidget {
 
 class WeightGraphState extends State<WeightGraph> {
   User user = User("", 0, 0, 0, 0, 0, "", "", "", "", 0, 0, 0, 0, 0, 0);
-  final bool animate = true;
   @override
   void initState() {
     super.initState();
@@ -1063,11 +1095,12 @@ class WeightGraphState extends State<WeightGraph> {
           'CaloCalc - Weight Graph',
           style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
         ),
+        backgroundColor: Colors.green[800],
         automaticallyImplyLeading: false,
       ),
       body: charts.TimeSeriesChart(
         seriesList,
-        animate: animate,
+        animate: true,
         dateTimeFactory: const charts.LocalDateTimeFactory(),
         primaryMeasureAxis: charts.NumericAxisSpec(
           tickProviderSpec:
@@ -1129,32 +1162,32 @@ class NaviState extends State<BottomNavi> {
           BottomNavigationBarItem(
             icon: Icon(Icons.food_bank_outlined),
             label: 'Food Data',
-            backgroundColor: Colors.lightBlue,
+            backgroundColor: Colors.cyan,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.add_chart_outlined),
             label: 'Weight Graph',
-            backgroundColor: Colors.lightBlue,
+            backgroundColor: Colors.green[800],
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.fitness_center),
             label: 'Activities',
-            backgroundColor: Colors.lightBlue,
+            backgroundColor: Color.fromARGB(255, 9, 9, 174),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.sports_outlined),
             label: 'Todays Activitys',
-            backgroundColor: Colors.lightBlue,
+            backgroundColor: Colors.green[800],
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.run_circle_outlined),
             label: 'Challenges',
-            backgroundColor: Colors.lightBlue,
+            backgroundColor: Colors.cyan,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_box_rounded),
             label: 'Account Data',
-            backgroundColor: Colors.lightBlue,
+            backgroundColor: Color.fromARGB(255, 9, 9, 174),
           ),
         ],
         onTap: (index) {
@@ -1260,6 +1293,7 @@ class AccountDeatilsState extends State<AccountDetails> {
           'CaloCalc - My Data',
           style: TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold),
         ),
+        backgroundColor: Color.fromARGB(255, 9, 9, 174),
         automaticallyImplyLeading: false,
       ),
       body: Column(
@@ -1278,6 +1312,11 @@ class AccountDeatilsState extends State<AccountDetails> {
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Color.fromARGB(255, 116, 10,
+                                209)), // Set the desired color here
+                      ),
                       onPressed: () async {
                         var data = await openDialog();
                         if (data == null) {
@@ -1310,19 +1349,26 @@ class AccountDeatilsState extends State<AccountDetails> {
                   width: 15,
                 ),
                 Text(
-                  "Weight: " + user.weight.toString(),
+                  "Weight: " + user.weight.toInt().toString(),
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 Expanded(
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Color.fromARGB(255, 116, 10,
+                                209)), // Set the desired color here
+                      ),
                       onPressed: () async {
                         var data = await openDialog();
                         if (data == null) {
                           return;
                         } else if (!isNumeric(data)) {
                           print("NO BONK");
+                        } else if (int.parse(data) == 0) {
+                          return;
                         } else {
                           var _detailsChannel =
                               IOWebSocketChannel.connect("ws://10.0.0.8:8820");
@@ -1366,12 +1412,19 @@ class AccountDeatilsState extends State<AccountDetails> {
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Color.fromARGB(255, 116, 10,
+                                209)), // Set the desired color here
+                      ),
                       onPressed: () async {
                         var data = await openDialog();
                         if (data == null) {
                           return;
                         } else if (!isNumeric(data)) {
                           print("NO BONK");
+                        } else if (int.parse(data) == 0) {
+                          return;
                         } else {
                           var _detailsChannel =
                               IOWebSocketChannel.connect("ws://10.0.0.8:8820");
@@ -1410,12 +1463,19 @@ class AccountDeatilsState extends State<AccountDetails> {
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Color.fromARGB(255, 116, 10,
+                                209)), // Set the desired color here
+                      ),
                       onPressed: () async {
                         var data = await openDialog();
                         if (data == null) {
                           return;
                         } else if (!isNumeric(data)) {
                           print("NO BONK");
+                        } else if (int.parse(data) == 0) {
+                          return;
                         } else {
                           var _detailsChannel =
                               IOWebSocketChannel.connect("ws://10.0.0.8:8820");
@@ -1454,12 +1514,19 @@ class AccountDeatilsState extends State<AccountDetails> {
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Color.fromARGB(255, 116, 10,
+                                209)), // Set the desired color here
+                      ),
                       onPressed: () async {
                         var data = await openDialog();
                         if (data == null) {
                           return;
                         } else if (!isNumeric(data)) {
                           print("NO BONK");
+                        } else if (int.parse(data) == 0) {
+                          return;
                         } else {
                           var _detailsChannel =
                               IOWebSocketChannel.connect("ws://10.0.0.8:8820");
@@ -1498,6 +1565,11 @@ class AccountDeatilsState extends State<AccountDetails> {
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Color.fromARGB(255, 116, 10,
+                                209)), // Set the desired color here
+                      ),
                       onPressed: () async {
                         var data = await openDialog();
                         if (data == null) {
@@ -1508,7 +1580,7 @@ class AccountDeatilsState extends State<AccountDetails> {
                           _detailsChannel.sink.add(xor_dec_enc("Update Pas," +
                               user.name +
                               "," +
-                              data.toString()));
+                              generateMd5(data).toString()));
                           _detailsChannel.stream.listen(
                             (msg) {
                               print("Message Recieved $msg");
@@ -1518,6 +1590,42 @@ class AccountDeatilsState extends State<AccountDetails> {
                         }
                       },
                       child: Text('Change Value'),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 15,
+                ),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Color.fromARGB(255, 116, 10,
+                                209)), // Set the desired color here
+                      ),
+                      onPressed: () {
+                        var _detailsChannel =
+                            IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                        _detailsChannel.sink
+                            .add(xor_dec_enc("Logout," + user.name));
+                        _detailsChannel.stream.listen(
+                          (msg) {
+                            print("Message Recieved $msg");
+                            _detailsChannel.sink.close();
+                          },
+                        );
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => Login()));
+                      },
+                      child: Text('LOGOUT'),
                     ),
                   ),
                 ),
@@ -1557,6 +1665,15 @@ class ChallengesState extends State<Challenges> {
   var visibility3 = true;
   var visibility4 = true;
   var application_channel;
+  var bar = AppBar(
+    centerTitle: true,
+    title: Text(
+      'CaloCalc - Monthly Challenge',
+      style: TextStyle(fontSize: 27.0, fontWeight: FontWeight.bold),
+    ),
+    backgroundColor: Colors.cyan,
+    automaticallyImplyLeading: false,
+  );
   List running = [
     '100 KM Running',
     '200 KM Running',
@@ -1602,14 +1719,7 @@ class ChallengesState extends State<Challenges> {
     if (user.challenge_one == true) {
       if (user.challenge_two == true) {
         return Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: Text(
-              'CaloCalc - Monthly Challenge',
-              style: TextStyle(fontSize: 27.0, fontWeight: FontWeight.bold),
-            ),
-            automaticallyImplyLeading: false,
-          ),
+          appBar: bar,
           body: Container(
             padding: EdgeInsets.all(16.0),
             decoration: BoxDecoration(
@@ -1668,6 +1778,10 @@ class ChallengesState extends State<Challenges> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Colors.cyan), // Set the desired color here
+                      ),
                       onPressed: () {
                         change_chal(text1, visibility3, 1);
                         if (text1.toLowerCase() == "unfollow") {
@@ -1737,6 +1851,10 @@ class ChallengesState extends State<Challenges> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Colors.cyan), // Set the desired color here
+                      ),
                       onPressed: () {
                         change_chal(text2, visibility4, 2);
                         if (text2.toLowerCase() == "unfollow") {
@@ -1763,14 +1881,7 @@ class ChallengesState extends State<Challenges> {
         );
       } else {
         return Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: Text(
-              'CaloCalc - Monthly Challenge',
-              style: TextStyle(fontSize: 27.0, fontWeight: FontWeight.bold),
-            ),
-            automaticallyImplyLeading: false,
-          ),
+          appBar: bar,
           body: Container(
             padding: EdgeInsets.all(16.0),
             decoration: BoxDecoration(
@@ -1829,6 +1940,10 @@ class ChallengesState extends State<Challenges> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Colors.cyan), // Set the desired color here
+                      ),
                       onPressed: () {
                         change_chal(text1, visibility3, 1);
                         if (text1.toLowerCase() == "unfollow") {
@@ -1898,6 +2013,10 @@ class ChallengesState extends State<Challenges> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Colors.cyan), // Set the desired color here
+                      ),
                       onPressed: () {
                         change_chal(button_text2, visibility2, 2);
                         if (button_text2.toLowerCase() == "unfollow") {
@@ -1925,14 +2044,7 @@ class ChallengesState extends State<Challenges> {
       }
     } else if (user.challenge_two == true) {
       return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(
-            'CaloCalc - Monthly Challenge',
-            style: TextStyle(fontSize: 27.0, fontWeight: FontWeight.bold),
-          ),
-          automaticallyImplyLeading: false,
-        ),
+        appBar: bar,
         body: Container(
           padding: EdgeInsets.all(16.0),
           decoration: BoxDecoration(
@@ -1991,6 +2103,10 @@ class ChallengesState extends State<Challenges> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          Colors.cyan), // Set the desired color here
+                    ),
                     onPressed: () {
                       change_chal(button_text1, visibility1, 1);
                       if (button_text1.toLowerCase() == "unfollow") {
@@ -2060,6 +2176,10 @@ class ChallengesState extends State<Challenges> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          Colors.cyan), // Set the desired color here
+                    ),
                     onPressed: () {
                       change_chal(text2, visibility4, 2);
                       if (text2.toLowerCase() == "unfollow") {
@@ -2086,14 +2206,7 @@ class ChallengesState extends State<Challenges> {
       );
     }
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          'CaloCalc - Monthly Challenge',
-          style: TextStyle(fontSize: 27.0, fontWeight: FontWeight.bold),
-        ),
-        automaticallyImplyLeading: false,
-      ),
+      appBar: bar,
       body: Container(
         padding: EdgeInsets.all(16.0),
         decoration: BoxDecoration(
@@ -2152,6 +2265,10 @@ class ChallengesState extends State<Challenges> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        Colors.cyan), // Set the desired color here
+                  ),
                   onPressed: () {
                     change_chal(button_text1, visibility1, 1);
                     if (button_text1.toLowerCase() == "unfollow") {
@@ -2221,6 +2338,10 @@ class ChallengesState extends State<Challenges> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        Colors.cyan), // Set the desired color here
+                  ),
                   onPressed: () {
                     change_chal(button_text2, visibility2, 2);
                     if (button_text2.toLowerCase() == "unfollow") {
@@ -2283,7 +2404,7 @@ class ActivitiesState extends State<Activities> {
   var dv = 'Activity';
   var cond = ' Exercise or Sport (1 hour)';
   var condition = [];
-
+  List times = ["Hour", "Hours", "Minutes", "Seconds", "Minute", "Second"];
   @override
   void initState() {
     super.initState();
@@ -2312,6 +2433,7 @@ class ActivitiesState extends State<Activities> {
           'CaloCalc - Activities',
           style: TextStyle(fontSize: 35.0, fontWeight: FontWeight.bold),
         ),
+        backgroundColor: Color.fromARGB(255, 9, 9, 174),
         automaticallyImplyLeading: false,
       ),
       body: Center(
@@ -2413,6 +2535,11 @@ class ActivitiesState extends State<Activities> {
             Align(
               alignment: Alignment.bottomCenter,
               child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                      Color.fromARGB(
+                          255, 9, 9, 174)), // Set the desired color here
+                ),
                 child: Text("SUBMIT"),
                 onPressed: () {
                   if (dv == "Activity") {
@@ -2447,33 +2574,36 @@ class ActivitiesState extends State<Activities> {
                       var list = control.text.split(" ");
                       for (int i = 1; i < list.length; i++) {
                         var numeric = double.parse(list[i - 1]);
-                        if (list[i].toLowerCase() == "hour" ||
-                            list[i].toLowerCase() == "hours") {
-                          actual = numeric * burned * user.weight;
-                        } else if (list[i].toLowerCase() == "minute" ||
-                            list[i].toLowerCase() == "minutes") {
-                          actual = numeric * burned * user.weight / 60;
-                        } else if (list[i].toLowerCase() == "second" ||
-                            list[i].toLowerCase() == "seconds") {
-                          actual = numeric * burned * user.weight / 3600;
-                        }
-                        if (dv.toLowerCase() == "running" &&
-                            cond.contains("mph")) {
-                          var state = double.parse(cond.split(" ")[1]);
-                          if (list[i].toLowerCase() == "hour" ||
-                              list[i].toLowerCase() == "hours") {
-                            distance += state * 1.6 * numeric;
-                          } else if (list[i].toLowerCase() == "minute" ||
-                              list[i].toLowerCase() == "minutes") {
-                            distance += state * 1.6 * numeric / 60;
-                          } else if (list[i].toLowerCase() == "second" ||
-                              list[i].toLowerCase() == "seconds") {
-                            distance += state * 1.6 * numeric / 3600;
+                        if (maxSimilarity(list[i], times) * 100 >= 30) {
+                          String ans = findClosest(list[i], times);
+                          if (ans.toLowerCase() == "hour" ||
+                              ans.toLowerCase() == "hours") {
+                            actual = numeric * burned * user.weight;
+                          } else if (ans.toLowerCase() == "minute" ||
+                              ans.toLowerCase() == "minutes") {
+                            actual = numeric * burned * user.weight / 60;
+                          } else if (ans.toLowerCase() == "second" ||
+                              ans.toLowerCase() == "seconds") {
+                            actual = numeric * burned * user.weight / 3600;
                           }
-                        } else if (dv.toLowerCase() == "cycling" &&
-                            cond.contains("mph")) {
-                          var state = cond.split(" ")[1];
-                          distance += cycling_dis(state, list.join(" "));
+                          if (dv.toLowerCase() == "running" &&
+                              cond.contains("mph")) {
+                            var state = double.parse(cond.split(" ")[1]);
+                            if (ans.toLowerCase() == "hour" ||
+                                ans.toLowerCase() == "hours") {
+                              distance += state * 1.6 * numeric;
+                            } else if (ans.toLowerCase() == "minute" ||
+                                ans.toLowerCase() == "minutes") {
+                              distance += state * 1.6 * numeric / 60;
+                            } else if (ans.toLowerCase() == "second" ||
+                                ans.toLowerCase() == "seconds") {
+                              distance += state * 1.6 * numeric / 3600;
+                            }
+                          } else if (dv.toLowerCase() == "cycling" &&
+                              cond.contains("mph")) {
+                            var state = cond.split(" ")[1];
+                            distance += cycling_dis(state, list.join(" "));
+                          }
                         }
                       }
                     } else {
@@ -2484,33 +2614,37 @@ class ActivitiesState extends State<Activities> {
                             double.parse(list.replaceAll(RegExp('[^0-9]'), ''));
                         String result =
                             list.replaceAll(RegExp(r'[^a-zA-Z]'), '');
-                        if (result.toLowerCase() == "hour" ||
-                            result.toLowerCase() == "hours") {
-                          actual += numeric * burned * user.weight;
-                        } else if (result.toLowerCase() == "minute" ||
-                            result.toLowerCase() == "minutes") {
-                          actual += numeric * burned * user.weight / 60;
-                        } else if (result.toLowerCase() == "second" ||
-                            result.toLowerCase() == "seconds") {
-                          actual += numeric * burned * user.weight / 3600;
-                        }
-                        if (dv.toLowerCase() == "running" &&
-                            cond.contains("mph")) {
-                          var state = double.parse(cond.split(" ")[1]);
+                        print(maxSimilarity(result, times) * 100);
+                        if (maxSimilarity(result, times) * 100 >= 30) {
+                          result = findClosest(result, times);
                           if (result.toLowerCase() == "hour" ||
                               result.toLowerCase() == "hours") {
-                            distance += state * 1.6 * numeric;
+                            actual += numeric * burned * user.weight;
                           } else if (result.toLowerCase() == "minute" ||
                               result.toLowerCase() == "minutes") {
-                            distance += state * 1.6 * numeric / 60;
+                            actual += numeric * burned * user.weight / 60;
                           } else if (result.toLowerCase() == "second" ||
                               result.toLowerCase() == "seconds") {
-                            distance += state * 1.6 * numeric / 3600;
+                            actual += numeric * burned * user.weight / 3600;
                           }
-                        } else if (dv.toLowerCase() == "cycling" &&
-                            cond.contains("mph")) {
-                          var state = cond.split(" ")[1];
-                          distance += cycling_dis(state, list);
+                          if (dv.toLowerCase() == "running" &&
+                              cond.contains("mph")) {
+                            var state = double.parse(cond.split(" ")[1]);
+                            if (result.toLowerCase() == "hour" ||
+                                result.toLowerCase() == "hours") {
+                              distance += state * 1.6 * numeric;
+                            } else if (result.toLowerCase() == "minute" ||
+                                result.toLowerCase() == "minutes") {
+                              distance += state * 1.6 * numeric / 60;
+                            } else if (result.toLowerCase() == "second" ||
+                                result.toLowerCase() == "seconds") {
+                              distance += state * 1.6 * numeric / 3600;
+                            }
+                          } else if (dv.toLowerCase() == "cycling" &&
+                              cond.contains("mph")) {
+                            var state = cond.split(" ")[1];
+                            distance += cycling_dis(state, list);
+                          }
                         }
                       }
                     }
@@ -2615,6 +2749,30 @@ class ActivitiesState extends State<Activities> {
     );
   }
 
+  double calculateJaccardSimilarity(String string1, String string2) {
+    // Convert the strings to sets of characters
+    final set1 = string1.split('').toSet();
+    final set2 = string2.split('').toSet();
+
+    // Calculate the intersection and union of the sets
+    final intersection = set1.intersection(set2);
+    final union = set1.union(set2);
+
+    // Calculate the Jaccard similarity coefficient
+    final similarity = intersection.length / union.length;
+    return similarity;
+  }
+
+  double maxSimilarity(String s1, List l1) {
+    double max = 0;
+    for (int i = 0; i < l1.length; i++) {
+      if (calculateJaccardSimilarity(s1, l1[i]) > max) {
+        max = calculateJaccardSimilarity(s1, l1[i]);
+      }
+    }
+    return max;
+  }
+
   double cycling_dis(var state, var time) {
     var distance = 0.0;
     double numeric = double.parse(time.replaceAll(RegExp('[^0-9]'), ''));
@@ -2640,6 +2798,18 @@ class ActivitiesState extends State<Activities> {
     }
     return distance;
   }
+
+  String findClosest(String s1, List l1) {
+    String ans = "";
+    double max = 0;
+    for (int i = 0; i < l1.length; i++) {
+      if (calculateJaccardSimilarity(s1, l1[i]) > max) {
+        max = calculateJaccardSimilarity(s1, l1[i]);
+        ans = l1[i];
+      }
+    }
+    return ans;
+  }
 }
 
 class TodaysActivitys extends StatefulWidget {
@@ -2653,7 +2823,6 @@ class TodaysActivitys extends StatefulWidget {
 
 class TodaysActivityState extends State<TodaysActivitys> {
   User user = User("", 0, 0, 0, 0, 0, "", "", "", "", 0, 0, 0, 0, 0, 0);
-  final control = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -2675,94 +2844,98 @@ class TodaysActivityState extends State<TodaysActivitys> {
           'CaloCalc - My Activities',
           style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold),
         ),
+        backgroundColor: Colors.green[800],
         automaticallyImplyLeading: false,
       ),
-      body: Table(
-        columnWidths: {
-          0: FractionColumnWidth(0.5),
-          1: FractionColumnWidth(0.5),
-        },
-        border: TableBorder.all(
-          color: Colors.black,
-          width: 3.0,
-          style: BorderStyle.solid,
-        ),
-        children: [
-          TableRow(
-            children: [
-              TableCell(
-                child: Text(
-                  'Activity Name',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-              TableCell(
-                child: Text(
-                  'Calories Burned',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-            ],
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Table(
+          columnWidths: {
+            0: FractionColumnWidth(0.5),
+            1: FractionColumnWidth(0.5),
+          },
+          border: TableBorder.all(
+            color: Colors.black,
+            width: 3.0,
+            style: BorderStyle.solid,
           ),
-          ...List<TableRow>.generate(
-            activs.length,
-            (index) {
-              if (activs[index].isNotEmpty) {
-                return TableRow(
-                  children: [
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(5.0),
-                        child: Text(
-                          activs[index].split("-")[0].toString(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+          children: [
+            TableRow(
+              children: [
+                TableCell(
+                  child: Text(
+                    'Activity Name',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                TableCell(
+                  child: Text(
+                    'Calories Burned',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            ...List<TableRow>.generate(
+              activs.length,
+              (index) {
+                if (activs[index].isNotEmpty) {
+                  return TableRow(
+                    children: [
+                      TableCell(
+                        child: Padding(
+                          padding: EdgeInsets.all(5.0),
+                          child: Text(
+                            activs[index].split("-")[0].toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(5.0),
-                        child: Text(
-                          activs[index].split("-")[1].toString(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                      TableCell(
+                        child: Padding(
+                          padding: EdgeInsets.all(5.0),
+                          child: Text(
+                            activs[index].split("-")[1].toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                );
-              } else {
-                return TableRow(
-                  children: [
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(5.0),
-                        child: Text(
-                          activs[index],
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                    ],
+                  );
+                } else {
+                  return TableRow(
+                    children: [
+                      TableCell(
+                        child: Padding(
+                          padding: EdgeInsets.all(5.0),
+                          child: Text(
+                            activs[index],
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(5.0),
-                        child: Text(
-                          activs[index],
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                      TableCell(
+                        child: Padding(
+                          padding: EdgeInsets.all(5.0),
+                          child: Text(
+                            activs[index],
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                );
-              }
-            },
-          )
-        ],
+                    ],
+                  );
+                }
+              },
+            )
+          ],
+        ),
       ),
     );
   }

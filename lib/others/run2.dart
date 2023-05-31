@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:first_app/main2.dart' as m;
+import 'package:first_app/login_register/login.dart';
 
 void main() {
   runApp(App());
@@ -13,6 +13,6 @@ class App extends StatefulWidget {
 class AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: m.Login());
+    return MaterialApp(debugShowCheckedModeBanner: false, home: Login());
   }
 }
