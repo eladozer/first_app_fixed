@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:first_app/others/user.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 
 String url = "https://api.api-ninjas.com/v1/nutrition?query=";
 var key = "Key1986";
@@ -101,19 +102,25 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
             Container(
               height: 45,
               width: 45,
-              child: CircularProgressIndicator(
-                value: user.current_cal / user.cal,
-                valueColor: user.current_cal / user.cal >= 1
-                    ? AlwaysStoppedAnimation<Color>(Colors.green)
-                    : AlwaysStoppedAnimation(Colors.white),
-              ),
-            ),
-            Text(
-              'Calories',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 10.0,
-                fontWeight: FontWeight.bold,
+              child: CircularPercentIndicator(
+                animation: true,
+                percent: user.current_cal / user.cal >= 1
+                    ? 1
+                    : user.current_cal / user.cal,
+                radius: 22.5,
+                progressColor: user.current_cal / user.cal >= 1
+                    ? Colors.green
+                    : Colors.white,
+                circularStrokeCap: CircularStrokeCap.round,
+                lineWidth: 5,
+                center: Text(
+                  'Calories',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
           ],
@@ -125,19 +132,25 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
               Container(
                 height: 45,
                 width: 45,
-                child: CircularProgressIndicator(
-                  value: user.current_prot / user.prot,
-                  valueColor: user.current_prot / user.prot >= 1
-                      ? AlwaysStoppedAnimation<Color>(Colors.green)
-                      : AlwaysStoppedAnimation(Colors.white),
-                ),
-              ),
-              Text(
-                'Proteins',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 10.0,
-                  fontWeight: FontWeight.bold,
+                child: CircularPercentIndicator(
+                  animation: true,
+                  percent: user.current_prot / user.prot >= 1
+                      ? 1
+                      : user.current_prot / user.prot,
+                  radius: 22.5,
+                  progressColor: user.current_prot / user.prot >= 1
+                      ? Colors.green
+                      : Colors.white,
+                  circularStrokeCap: CircularStrokeCap.round,
+                  lineWidth: 5,
+                  center: Text(
+                    'Proteins',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
             ],
