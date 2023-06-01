@@ -35,31 +35,31 @@ class ChallengesState extends State<Challenges> {
   );
   List running = [
     '100 KM Running',
+    '125 KM Running',
+    '150 KM Running',
+    '175 KM Running',
     '200 KM Running',
+    '225 KM Running',
+    '250 KM Running',
+    '275 KM Running',
     '300 KM Running',
-    '400 KM Running',
-    '500 KM Running',
-    '600 KM Running',
-    '700 KM Running',
-    '800 KM Running',
-    '900 KM Running',
-    '1000 KM Running',
-    '1100 KM Running',
-    '1200 KM Running',
+    '325 KM Running',
+    '350 KM Running',
+    '375 KM Running',
   ];
   List cycling = [
     '100 KM Cycling',
+    '125 KM Cycling',
+    '150 KM Cycling',
+    '177 KM Cycling',
     '200 KM Cycling',
+    '225 KM Cycling',
+    '250 KM Cycling',
+    '275 KM Cycling',
     '300 KM Cycling',
-    '400 KM Cycling',
-    '500 KM Cycling',
-    '600 KM Cycling',
-    '700 KM Cycling',
-    '800 KM Cycling',
-    '900 KM Cycling',
-    '1000 KM Cycling',
-    '1100 KM Cycling',
-    '1200 KM Cycling',
+    '325 KM Cycling',
+    '350 KM Cycling',
+    '375 KM Cycling',
   ];
   @override
   void initState() {
@@ -70,11 +70,14 @@ class ChallengesState extends State<Challenges> {
 
   @override
   Widget build(BuildContext context) {
-    print(user.running.toString() + "," + user.cycling.toString());
     return data(user.challenge_one, user.challenge_two);
   }
 
   Scaffold data(var cond1, var cond2) {
+    var cyc_precent = user.cycling /
+        int.parse(cycling[DateTime.now().month - 1].toString().split(" ")[0]);
+    var run_precent = user.running /
+        int.parse(running[DateTime.now().month - 1].toString().split(" ")[0]);
     if (user.challenge_one == true) {
       if (user.challenge_two == true) {
         return Scaffold(
@@ -110,25 +113,29 @@ class ChallengesState extends State<Challenges> {
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: CircularPercentIndicator(
+                      animation: true,
                       radius: 40.0,
                       lineWidth: 8.0,
-                      percent: user.running /
-                          int.parse(running[DateTime.now().month - 1]
-                              .toString()
-                              .split(" ")[0]),
-                      center: new Text(
-                        (user.running /
-                                    int.parse(running[DateTime.now().month - 1]
-                                        .toString()
-                                        .split(" ")[0]))
-                                .toString() +
-                            "%",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15.0,
-                        ),
-                      ),
-                      progressColor: Colors.blue,
+                      percent: run_precent >= 1 ? 1 : run_precent,
+                      center: run_precent >= 1
+                          ? Text(
+                              "100%",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15.0,
+                              ),
+                            )
+                          : Text(
+                              run_precent.toString() + "%",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15.0,
+                              ),
+                            ),
+                      progressColor: run_precent >= 1
+                          ? Color.fromARGB(255, 12, 193, 18)
+                          : Colors.cyan,
+                      circularStrokeCap: CircularStrokeCap.round,
                     ),
                   ),
                 ),
@@ -183,25 +190,29 @@ class ChallengesState extends State<Challenges> {
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: CircularPercentIndicator(
+                      animation: true,
                       radius: 40.0,
                       lineWidth: 8.0,
-                      percent: user.cycling /
-                          int.parse(cycling[DateTime.now().month - 1]
-                              .toString()
-                              .split(" ")[0]),
-                      center: new Text(
-                        (user.cycling /
-                                    int.parse(cycling[DateTime.now().month - 1]
-                                        .toString()
-                                        .split(" ")[0]))
-                                .toString() +
-                            "%",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15.0,
-                        ),
-                      ),
-                      progressColor: Colors.blue,
+                      percent: cyc_precent >= 1 ? 1 : cyc_precent,
+                      center: cyc_precent >= 1
+                          ? Text(
+                              "100%",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15.0,
+                              ),
+                            )
+                          : Text(
+                              cyc_precent.toString() + "%",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15.0,
+                              ),
+                            ),
+                      progressColor: cyc_precent >= 1
+                          ? Color.fromARGB(255, 12, 193, 18)
+                          : Colors.cyan,
+                      circularStrokeCap: CircularStrokeCap.round,
                     ),
                   ),
                 ),
@@ -272,25 +283,29 @@ class ChallengesState extends State<Challenges> {
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: CircularPercentIndicator(
+                      animation: true,
                       radius: 40.0,
                       lineWidth: 8.0,
-                      percent: user.running /
-                          int.parse(running[DateTime.now().month - 1]
-                              .toString()
-                              .split(" ")[0]),
-                      center: new Text(
-                        (user.running /
-                                    int.parse(running[DateTime.now().month - 1]
-                                        .toString()
-                                        .split(" ")[0]))
-                                .toString() +
-                            "%",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15.0,
-                        ),
-                      ),
-                      progressColor: Colors.blue,
+                      percent: run_precent >= 1 ? 1 : run_precent,
+                      center: run_precent >= 1
+                          ? Text(
+                              "100%",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15.0,
+                              ),
+                            )
+                          : Text(
+                              run_precent.toString() + "%",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15.0,
+                              ),
+                            ),
+                      progressColor: run_precent >= 1
+                          ? Color.fromARGB(255, 12, 193, 18)
+                          : Colors.cyan,
+                      circularStrokeCap: CircularStrokeCap.round,
                     ),
                   ),
                 ),
@@ -345,25 +360,29 @@ class ChallengesState extends State<Challenges> {
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: CircularPercentIndicator(
+                      animation: true,
                       radius: 40.0,
                       lineWidth: 8.0,
-                      percent: user.cycling /
-                          int.parse(cycling[DateTime.now().month - 1]
-                              .toString()
-                              .split(" ")[0]),
-                      center: new Text(
-                        (user.cycling /
-                                    int.parse(cycling[DateTime.now().month - 1]
-                                        .toString()
-                                        .split(" ")[0]))
-                                .toString() +
-                            "%",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15.0,
-                        ),
-                      ),
-                      progressColor: Colors.blue,
+                      percent: cyc_precent >= 1 ? 1 : cyc_precent,
+                      center: cyc_precent >= 1
+                          ? Text(
+                              "100%",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15.0,
+                              ),
+                            )
+                          : Text(
+                              cyc_precent.toString() + "%",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15.0,
+                              ),
+                            ),
+                      progressColor: cyc_precent >= 1
+                          ? Color.fromARGB(255, 12, 193, 18)
+                          : Colors.cyan,
+                      circularStrokeCap: CircularStrokeCap.round,
                     ),
                   ),
                 ),
@@ -435,25 +454,29 @@ class ChallengesState extends State<Challenges> {
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: CircularPercentIndicator(
+                    animation: true,
                     radius: 40.0,
                     lineWidth: 8.0,
-                    percent: user.running /
-                        int.parse(running[DateTime.now().month - 1]
-                            .toString()
-                            .split(" ")[0]),
-                    center: new Text(
-                      (user.running /
-                                  int.parse(running[DateTime.now().month - 1]
-                                      .toString()
-                                      .split(" ")[0]))
-                              .toString() +
-                          "%",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15.0,
-                      ),
-                    ),
-                    progressColor: Colors.blue,
+                    percent: run_precent >= 1 ? 1 : run_precent,
+                    center: run_precent >= 1
+                        ? Text(
+                            "100%",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15.0,
+                            ),
+                          )
+                        : Text(
+                            run_precent.toString() + "%",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15.0,
+                            ),
+                          ),
+                    progressColor: run_precent >= 1
+                        ? Color.fromARGB(255, 12, 193, 18)
+                        : Colors.cyan,
+                    circularStrokeCap: CircularStrokeCap.round,
                   ),
                 ),
               ),
@@ -508,25 +531,29 @@ class ChallengesState extends State<Challenges> {
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: CircularPercentIndicator(
+                    animation: true,
                     radius: 40.0,
                     lineWidth: 8.0,
-                    percent: user.cycling /
-                        int.parse(cycling[DateTime.now().month - 1]
-                            .toString()
-                            .split(" ")[0]),
-                    center: new Text(
-                      (user.cycling /
-                                  int.parse(cycling[DateTime.now().month - 1]
-                                      .toString()
-                                      .split(" ")[0]))
-                              .toString() +
-                          "%",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15.0,
-                      ),
-                    ),
-                    progressColor: Colors.blue,
+                    percent: cyc_precent >= 1 ? 1 : cyc_precent,
+                    center: cyc_precent >= 1
+                        ? Text(
+                            "100%",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15.0,
+                            ),
+                          )
+                        : Text(
+                            cyc_precent.toString() + "%",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15.0,
+                            ),
+                          ),
+                    progressColor: cyc_precent >= 1
+                        ? Color.fromARGB(255, 12, 193, 18)
+                        : Colors.cyan,
+                    circularStrokeCap: CircularStrokeCap.round,
                   ),
                 ),
               ),
@@ -597,25 +624,29 @@ class ChallengesState extends State<Challenges> {
               child: Align(
                 alignment: Alignment.centerRight,
                 child: CircularPercentIndicator(
+                  animation: true,
                   radius: 40.0,
                   lineWidth: 8.0,
-                  percent: user.running /
-                      int.parse(running[DateTime.now().month - 1]
-                          .toString()
-                          .split(" ")[0]),
-                  center: new Text(
-                    (user.running /
-                                int.parse(running[DateTime.now().month - 1]
-                                    .toString()
-                                    .split(" ")[0]))
-                            .toString() +
-                        "%",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15.0,
-                    ),
-                  ),
-                  progressColor: Colors.blue,
+                  percent: run_precent >= 1 ? 1 : run_precent,
+                  center: run_precent >= 1
+                      ? Text(
+                          "100%",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15.0,
+                          ),
+                        )
+                      : Text(
+                          run_precent.toString() + "%",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15.0,
+                          ),
+                        ),
+                  progressColor: run_precent >= 1
+                      ? Color.fromARGB(255, 12, 193, 18)
+                      : Colors.cyan,
+                  circularStrokeCap: CircularStrokeCap.round,
                 ),
               ),
             ),
@@ -670,25 +701,29 @@ class ChallengesState extends State<Challenges> {
               child: Align(
                 alignment: Alignment.centerRight,
                 child: CircularPercentIndicator(
+                  animation: true,
                   radius: 40.0,
                   lineWidth: 8.0,
-                  percent: user.cycling /
-                      int.parse(cycling[DateTime.now().month - 1]
-                          .toString()
-                          .split(" ")[0]),
-                  center: new Text(
-                    (user.cycling /
-                                int.parse(cycling[DateTime.now().month - 1]
-                                    .toString()
-                                    .split(" ")[0]))
-                            .toString() +
-                        "%",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15.0,
-                    ),
-                  ),
-                  progressColor: Colors.blue,
+                  percent: cyc_precent >= 1 ? 1 : cyc_precent,
+                  center: cyc_precent >= 1
+                      ? Text(
+                          "100%",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15.0,
+                          ),
+                        )
+                      : Text(
+                          cyc_precent.toString() + "%",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15.0,
+                          ),
+                        ),
+                  progressColor: cyc_precent >= 1
+                      ? Color.fromARGB(255, 12, 193, 18)
+                      : Colors.cyan,
+                  circularStrokeCap: CircularStrokeCap.round,
                 ),
               ),
             ),

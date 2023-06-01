@@ -948,8 +948,8 @@ class RegState extends State<Register> {
                           int.parse(ctrl2.text) == 0 ||
                           int.parse(ctrl1.text) == 0) {
                       } else {
-                        _regChannel = IOWebSocketChannel.connect(
-                            "ws://192.168.7.91:8820");
+                        _regChannel =
+                            IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                         String message =
                             "Register,${control.text},${ctrl.text},${cntl.text},${control2.text},${ctrl2.text},${ctrl1.text}";
                         _regChannel.sink.add(message);
@@ -1318,8 +1318,8 @@ class AccountDeatilsState extends State<AccountDetails> {
                         if (data == null) {
                           return;
                         } else {
-                          var _detailsChannel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                          var _detailsChannel = IOWebSocketChannel.connect(
+                              "ws://192.168.7.91:8820");
                           _detailsChannel.sink
                               .add("Update Name," + user.name + "," + data);
                           _detailsChannel.stream.listen(
@@ -1359,8 +1359,8 @@ class AccountDeatilsState extends State<AccountDetails> {
                         } else if (!isNumeric(data)) {
                           print("NO BONK");
                         } else {
-                          var _detailsChannel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                          var _detailsChannel = IOWebSocketChannel.connect(
+                              "ws://192.168.7.91:8820");
                           var dat = user.weight_data.split("/");
                           dat[0] += "-" + data;
                           dat[1] += "+" + DateTime.now().toString();
@@ -1407,8 +1407,8 @@ class AccountDeatilsState extends State<AccountDetails> {
                         } else if (!isNumeric(data)) {
                           print("NO BONK");
                         } else {
-                          var _detailsChannel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                          var _detailsChannel = IOWebSocketChannel.connect(
+                              "ws://192.168.7.91:8820");
                           _detailsChannel.sink.add("Update Cal Goal," +
                               user.name +
                               "," +
@@ -1450,8 +1450,8 @@ class AccountDeatilsState extends State<AccountDetails> {
                         } else if (!isNumeric(data)) {
                           print("NO BONK");
                         } else {
-                          var _detailsChannel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                          var _detailsChannel = IOWebSocketChannel.connect(
+                              "ws://192.168.7.91:8820");
                           _detailsChannel.sink.add("Update Prot Goal," +
                               user.name +
                               "," +
@@ -1493,8 +1493,8 @@ class AccountDeatilsState extends State<AccountDetails> {
                         } else if (!isNumeric(data)) {
                           print("NO BONK");
                         } else {
-                          var _detailsChannel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                          var _detailsChannel = IOWebSocketChannel.connect(
+                              "ws://192.168.7.91:8820");
                           _detailsChannel.sink.add("Update Burned Goal," +
                               user.name +
                               "," +
@@ -1534,8 +1534,8 @@ class AccountDeatilsState extends State<AccountDetails> {
                         if (data == null) {
                           return;
                         } else {
-                          var _detailsChannel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                          var _detailsChannel = IOWebSocketChannel.connect(
+                              "ws://192.168.7.91:8820");
                           _detailsChannel.sink.add("Update Pas," +
                               user.name +
                               "," +
@@ -1702,14 +1702,14 @@ class ChallengesState extends State<Challenges> {
                       onPressed: () {
                         change_chal(text1, visibility3, 1);
                         if (text1.toLowerCase() == "unfollow") {
-                          application_channel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                          application_channel = IOWebSocketChannel.connect(
+                              "ws://192.168.7.91:8820");
                           String msg = "Update Chal," + user.name + ",1,0";
                           application_channel.sink.add(msg);
                           application_channel.sink.close();
                         } else {
-                          application_channel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                          application_channel = IOWebSocketChannel.connect(
+                              "ws://192.168.7.91:8820");
                           String msg = "Update Chal," + user.name + ",1,1";
                           application_channel.sink.add(msg);
                           application_channel.sink.close();
@@ -1771,14 +1771,14 @@ class ChallengesState extends State<Challenges> {
                       onPressed: () {
                         change_chal(text2, visibility4, 2);
                         if (text2.toLowerCase() == "unfollow") {
-                          application_channel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                          application_channel = IOWebSocketChannel.connect(
+                              "ws://192.168.7.91:8820");
                           String msg = "Update Chal," + user.name + ",2,0";
                           application_channel.sink.add(msg);
                           application_channel.sink.close();
                         } else {
-                          application_channel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                          application_channel = IOWebSocketChannel.connect(
+                              "ws://192.168.7.91:8820");
                           String msg = "Update Chal," + user.name + ",2,1";
                           application_channel.sink.add(msg);
                           application_channel.sink.close();
@@ -1863,14 +1863,14 @@ class ChallengesState extends State<Challenges> {
                       onPressed: () {
                         change_chal(text1, visibility3, 1);
                         if (text1.toLowerCase() == "unfollow") {
-                          application_channel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                          application_channel = IOWebSocketChannel.connect(
+                              "ws://192.168.7.91:8820");
                           String msg = "Update Chal," + user.name + ",1,0";
                           application_channel.sink.add(msg);
                           application_channel.sink.close();
                         } else {
-                          application_channel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                          application_channel = IOWebSocketChannel.connect(
+                              "ws://192.168.7.91:8820");
                           String msg = "Update Chal," + user.name + ",1,1";
                           application_channel.sink.add(msg);
                           application_channel.sink.close();
@@ -1932,14 +1932,14 @@ class ChallengesState extends State<Challenges> {
                       onPressed: () {
                         change_chal(button_text2, visibility2, 2);
                         if (button_text2.toLowerCase() == "unfollow") {
-                          application_channel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                          application_channel = IOWebSocketChannel.connect(
+                              "ws://192.168.7.91:8820");
                           String msg = "Update Chal," + user.name + ",2,0";
                           application_channel.sink.add(msg);
                           application_channel.sink.close();
                         } else {
-                          application_channel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                          application_channel = IOWebSocketChannel.connect(
+                              "ws://192.168.7.91:8820");
                           String msg = "Update Chal," + user.name + ",2,1";
                           application_channel.sink.add(msg);
                           application_channel.sink.close();

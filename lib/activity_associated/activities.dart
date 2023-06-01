@@ -207,20 +207,20 @@ class ActivitiesState extends State<Activities> {
                             actual = numeric * burned * user.weight / 3600;
                           }
                           if (dv.toLowerCase() == "running" &&
-                              cond.contains("mph")) {
+                              cond.contains("kmh")) {
                             var state = double.parse(cond.split(" ")[1]);
                             if (ans.toLowerCase() == "hour" ||
                                 ans.toLowerCase() == "hours") {
-                              distance += state * 1.6 * numeric;
+                              distance += state * numeric;
                             } else if (ans.toLowerCase() == "minute" ||
                                 ans.toLowerCase() == "minutes") {
-                              distance += state * 1.6 * numeric / 60;
+                              distance += state * numeric / 60;
                             } else if (ans.toLowerCase() == "second" ||
                                 ans.toLowerCase() == "seconds") {
-                              distance += state * 1.6 * numeric / 3600;
+                              distance += state * numeric / 3600;
                             }
                           } else if (dv.toLowerCase() == "cycling" &&
-                              cond.contains("mph")) {
+                              cond.contains("kmh")) {
                             var state = cond.split(" ")[1];
                             distance += cycling_dis(state, list.join(" "));
                           }
@@ -234,7 +234,6 @@ class ActivitiesState extends State<Activities> {
                             double.parse(list.replaceAll(RegExp('[^0-9]'), ''));
                         String result =
                             list.replaceAll(RegExp(r'[^a-zA-Z]'), '');
-                        print(maxSimilarity(result, times) * 100);
                         if (maxSimilarity(result, times) * 100 >= 30) {
                           result = findClosest(result, times);
                           if (result.toLowerCase() == "hour" ||
@@ -248,20 +247,20 @@ class ActivitiesState extends State<Activities> {
                             actual += numeric * burned * user.weight / 3600;
                           }
                           if (dv.toLowerCase() == "running" &&
-                              cond.contains("mph")) {
+                              cond.contains("kmh")) {
                             var state = double.parse(cond.split(" ")[1]);
                             if (result.toLowerCase() == "hour" ||
                                 result.toLowerCase() == "hours") {
-                              distance += state * 1.6 * numeric;
+                              distance += state * numeric;
                             } else if (result.toLowerCase() == "minute" ||
                                 result.toLowerCase() == "minutes") {
-                              distance += state * 1.6 * numeric / 60;
+                              distance += state * numeric / 60;
                             } else if (result.toLowerCase() == "second" ||
                                 result.toLowerCase() == "seconds") {
-                              distance += state * 1.6 * numeric / 3600;
+                              distance += state * numeric / 3600;
                             }
                           } else if (dv.toLowerCase() == "cycling" &&
-                              cond.contains("mph")) {
+                              cond.contains("kmh")) {
                             var state = cond.split(" ")[1];
                             distance += cycling_dis(state, list);
                           }
@@ -288,10 +287,10 @@ class ActivitiesState extends State<Activities> {
                     );
                     // 300 cal = 0.039 kg
                     String msg = "";
-                    if (dv.toLowerCase() == "running" && cond.contains("mph")) {
+                    if (dv.toLowerCase() == "running" && cond.contains("kmh")) {
                       user.set_running(distance.toInt());
                     } else if (dv.toLowerCase() == "cycling" &&
-                        cond.contains("mph")) {
+                        cond.contains("kmh")) {
                       user.set_cycling(distance.toInt());
                     }
                     _increaseCurBurn(actual.toInt());
@@ -301,16 +300,14 @@ class ActivitiesState extends State<Activities> {
                       msg = "running," +
                           user.name +
                           "," +
-                          (user.cur_burned.toInt() + actual.toInt())
-                              .toString() +
+                          actual.toInt().toString() +
                           "," +
                           distance.toInt().toString();
                     } else if (dv.toLowerCase() == "cycling") {
                       msg = "cycling," +
                           user.name +
                           "," +
-                          (user.cur_burned.toInt() + actual.toInt())
-                              .toString() +
+                          actual.toInt().toString() +
                           "," +
                           distance.toInt().toString();
                     } else {
@@ -319,7 +316,7 @@ class ActivitiesState extends State<Activities> {
                           "," +
                           user.name +
                           "," +
-                          (user.cur_burned.toInt() + actual.toInt()).toString();
+                          actual.toInt().toString();
                     }
                     _detailsChannel.sink.add(xor_dec_enc(msg));
                     _detailsChannel.stream.listen(

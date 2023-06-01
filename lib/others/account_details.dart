@@ -116,16 +116,15 @@ class AccountDeatilsState extends State<AccountDetails> {
                     child: ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
-                            Color.fromARGB(255, 116, 10,
-                                209)), // Set the desired color here
+                            Colors.green), // Set the desired color here
                       ),
                       onPressed: () async {
                         var data = await openDialog();
                         if (data == null) {
                           return;
                         } else {
-                          var _detailsChannel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                          var _detailsChannel = IOWebSocketChannel.connect(
+                              "ws://192.168.7.91:8820");
                           _detailsChannel.sink.add(xor_dec_enc(
                               "Update Name," + user.name + "," + data));
                           _detailsChannel.stream.listen(
@@ -160,8 +159,7 @@ class AccountDeatilsState extends State<AccountDetails> {
                     child: ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
-                            Color.fromARGB(255, 116, 10,
-                                209)), // Set the desired color here
+                            Colors.green), // Set the desired color here
                       ),
                       onPressed: () async {
                         var data = await openDialog();
@@ -172,8 +170,8 @@ class AccountDeatilsState extends State<AccountDetails> {
                         } else if (int.parse(data) == 0) {
                           return;
                         } else {
-                          var _detailsChannel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                          var _detailsChannel = IOWebSocketChannel.connect(
+                              "ws://192.168.7.91:8820");
                           var dat = user.weight_data.split("/");
                           dat[0] += "-" + data;
                           dat[1] += "+" + DateTime.now().toString();
@@ -216,8 +214,7 @@ class AccountDeatilsState extends State<AccountDetails> {
                     child: ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
-                            Color.fromARGB(255, 116, 10,
-                                209)), // Set the desired color here
+                            Colors.green), // Set the desired color here
                       ),
                       onPressed: () async {
                         var data = await openDialog();
@@ -228,8 +225,8 @@ class AccountDeatilsState extends State<AccountDetails> {
                         } else if (int.parse(data) == 0) {
                           return;
                         } else {
-                          var _detailsChannel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                          var _detailsChannel = IOWebSocketChannel.connect(
+                              "ws://192.168.7.91:8820");
                           _detailsChannel.sink.add(xor_dec_enc(
                               "Update Cal Goal," +
                                   user.name +
@@ -267,8 +264,7 @@ class AccountDeatilsState extends State<AccountDetails> {
                     child: ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
-                            Color.fromARGB(255, 116, 10,
-                                209)), // Set the desired color here
+                            Colors.green), // Set the desired color here
                       ),
                       onPressed: () async {
                         var data = await openDialog();
@@ -279,8 +275,8 @@ class AccountDeatilsState extends State<AccountDetails> {
                         } else if (int.parse(data) == 0) {
                           return;
                         } else {
-                          var _detailsChannel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                          var _detailsChannel = IOWebSocketChannel.connect(
+                              "ws://192.168.7.91:8820");
                           _detailsChannel.sink.add(xor_dec_enc(
                               "Update Prot Goal," +
                                   user.name +
@@ -318,8 +314,7 @@ class AccountDeatilsState extends State<AccountDetails> {
                     child: ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
-                            Color.fromARGB(255, 116, 10,
-                                209)), // Set the desired color here
+                            Colors.green), // Set the desired color here
                       ),
                       onPressed: () async {
                         var data = await openDialog();
@@ -330,8 +325,8 @@ class AccountDeatilsState extends State<AccountDetails> {
                         } else if (int.parse(data) == 0) {
                           return;
                         } else {
-                          var _detailsChannel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                          var _detailsChannel = IOWebSocketChannel.connect(
+                              "ws://192.168.7.91:8820");
                           _detailsChannel.sink.add(xor_dec_enc(
                               "Update Burned Goal," +
                                   user.name +
@@ -369,16 +364,15 @@ class AccountDeatilsState extends State<AccountDetails> {
                     child: ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
-                            Color.fromARGB(255, 116, 10,
-                                209)), // Set the desired color here
+                            Colors.green), // Set the desired color here
                       ),
                       onPressed: () async {
                         var data = await openDialog();
                         if (data == null) {
                           return;
                         } else {
-                          var _detailsChannel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                          var _detailsChannel = IOWebSocketChannel.connect(
+                              "ws://192.168.7.91:8820");
                           _detailsChannel.sink.add(xor_dec_enc("Update Pas," +
                               user.name +
                               "," +
@@ -410,8 +404,7 @@ class AccountDeatilsState extends State<AccountDetails> {
                     child: ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
-                            Color.fromARGB(255, 116, 10,
-                                209)), // Set the desired color here
+                            Colors.green), // Set the desired color here
                       ),
                       onPressed: () {
                         var _detailsChannel =

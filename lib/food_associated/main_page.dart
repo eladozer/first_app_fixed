@@ -327,12 +327,20 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                 mealChannel = IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                 var item = list[i];
                 String changed = "";
-                if (item.split(" ")[0].contains("gr")) {
-                  changed = item.split(" ")[0].replaceAll("gr", "g") +
-                      " " +
-                      item.split(" ")[1];
+                if (item[0] != " ") {
+                  if (item.split(" ")[0].contains("gr")) {
+                    changed = item.split(" ")[0].replaceAll("gr", "g") +
+                        " " +
+                        item.split(" ")[1];
+                  }
+                } else {
+                  item = item.substring(1);
+                  if (item.split(" ")[0].contains("gr")) {
+                    changed = item.split(" ")[0].replaceAll("gr", "g") +
+                        " " +
+                        item.split(" ")[1];
+                  }
                 }
-                print(changed);
                 item = changed;
                 if (item[0] == " ") {
                   String prompt = url + item.substring(1);
