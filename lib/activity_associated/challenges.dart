@@ -91,161 +91,163 @@ class ChallengesState extends State<Challenges> {
               ),
               borderRadius: BorderRadius.circular(8.0),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  running[DateTime.now().month - 1].toString(),
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
-                  ),
-                ),
-                SizedBox(height: 16.0),
-                Text(
-                  'You Have All Month To Reach ${int.parse(running[DateTime.now().month - 1].toString().split(" ")[0])} KMS',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                  ),
-                ),
-                Visibility(
-                  visible: visibility3,
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: CircularPercentIndicator(
-                      animation: true,
-                      radius: 40.0,
-                      lineWidth: 8.0,
-                      percent: run_precent >= 1 ? 1 : run_precent,
-                      center: run_precent >= 1
-                          ? Text(
-                              "100%",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15.0,
-                              ),
-                            )
-                          : Text(
-                              run_precent.toString() + "%",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15.0,
-                              ),
-                            ),
-                      progressColor: run_precent >= 1
-                          ? Color.fromARGB(255, 12, 193, 18)
-                          : Colors.cyan,
-                      circularStrokeCap: CircularStrokeCap.round,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    running[DateTime.now().month - 1].toString(),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.0,
                     ),
                   ),
-                ),
-                SizedBox(height: 16.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            Colors.cyan), // Set the desired color here
+                  SizedBox(height: 16.0),
+                  Text(
+                    'You Have All Month To Reach ${int.parse(running[DateTime.now().month - 1].toString().split(" ")[0])} KMS',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  Visibility(
+                    visible: visibility3,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: CircularPercentIndicator(
+                        animation: true,
+                        radius: 40.0,
+                        lineWidth: 8.0,
+                        percent: run_precent >= 1 ? 1 : run_precent,
+                        center: run_precent >= 1
+                            ? Text(
+                                "100%",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15.0,
+                                ),
+                              )
+                            : Text(
+                                (run_precent * 100).toInt().toString() + "%",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15.0,
+                                ),
+                              ),
+                        progressColor: run_precent >= 1
+                            ? Color.fromARGB(255, 12, 193, 18)
+                            : Colors.cyan,
+                        circularStrokeCap: CircularStrokeCap.round,
                       ),
-                      onPressed: () {
-                        change_chal(text1, visibility3, 1);
-                        if (text1.toLowerCase() == "unfollow") {
-                          application_channel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
-                          String msg = "Update Chal," + user.name + ",1,0";
-                          application_channel.sink.add(xor_dec_enc(msg));
-                          application_channel.sink.close();
-                        } else {
-                          application_channel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
-                          String msg = "Update Chal," + user.name + ",1,1";
-                          application_channel.sink.add(xor_dec_enc(msg));
-                          application_channel.sink.close();
-                        }
-                      },
-                      child: Text(text1),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 150,
-                ),
-                Text(
-                  cycling[DateTime.now().month - 1].toString(),
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
-                  ),
-                ),
-                SizedBox(height: 16.0),
-                Text(
-                  'You Have All Month To Reach ${int.parse(cycling[DateTime.now().month - 1].toString().split(" ")[0])} KMS',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                  ),
-                ),
-                Visibility(
-                  visible: visibility4,
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: CircularPercentIndicator(
-                      animation: true,
-                      radius: 40.0,
-                      lineWidth: 8.0,
-                      percent: cyc_precent >= 1 ? 1 : cyc_precent,
-                      center: cyc_precent >= 1
-                          ? Text(
-                              "100%",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15.0,
-                              ),
-                            )
-                          : Text(
-                              cyc_precent.toString() + "%",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15.0,
-                              ),
-                            ),
-                      progressColor: cyc_precent >= 1
-                          ? Color.fromARGB(255, 12, 193, 18)
-                          : Colors.cyan,
-                      circularStrokeCap: CircularStrokeCap.round,
                     ),
                   ),
-                ),
-                SizedBox(height: 16.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            Colors.cyan), // Set the desired color here
+                  SizedBox(height: 16.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Colors.cyan), // Set the desired color here
+                        ),
+                        onPressed: () {
+                          change_chal(text1, visibility3, 1);
+                          if (text1.toLowerCase() == "unfollow") {
+                            application_channel = IOWebSocketChannel.connect(
+                                "ws://10.0.0.8:8820");
+                            String msg = "Update Chal," + user.name + ",1,0";
+                            application_channel.sink.add(xor_dec_enc(msg));
+                            application_channel.sink.close();
+                          } else {
+                            application_channel = IOWebSocketChannel.connect(
+                                "ws://10.0.0.8:8820");
+                            String msg = "Update Chal," + user.name + ",1,1";
+                            application_channel.sink.add(xor_dec_enc(msg));
+                            application_channel.sink.close();
+                          }
+                        },
+                        child: Text(text1),
                       ),
-                      onPressed: () {
-                        change_chal(text2, visibility4, 2);
-                        if (text2.toLowerCase() == "unfollow") {
-                          application_channel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
-                          String msg = "Update Chal," + user.name + ",2,0";
-                          application_channel.sink.add(xor_dec_enc(msg));
-                          application_channel.sink.close();
-                        } else {
-                          application_channel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
-                          String msg = "Update Chal," + user.name + ",2,1";
-                          application_channel.sink.add(xor_dec_enc(msg));
-                          application_channel.sink.close();
-                        }
-                      },
-                      child: Text(text2),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 150,
+                  ),
+                  Text(
+                    cycling[DateTime.now().month - 1].toString(),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.0,
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                  SizedBox(height: 16.0),
+                  Text(
+                    'You Have All Month To Reach ${int.parse(cycling[DateTime.now().month - 1].toString().split(" ")[0])} KMS',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  Visibility(
+                    visible: visibility4,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: CircularPercentIndicator(
+                        animation: true,
+                        radius: 40.0,
+                        lineWidth: 8.0,
+                        percent: cyc_precent >= 1 ? 1 : cyc_precent,
+                        center: cyc_precent >= 1
+                            ? Text(
+                                "100%",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15.0,
+                                ),
+                              )
+                            : Text(
+                                (cyc_precent * 100).toInt().toString() + "%",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15.0,
+                                ),
+                              ),
+                        progressColor: cyc_precent >= 1
+                            ? Color.fromARGB(255, 12, 193, 18)
+                            : Colors.cyan,
+                        circularStrokeCap: CircularStrokeCap.round,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Colors.cyan), // Set the desired color here
+                        ),
+                        onPressed: () {
+                          change_chal(text2, visibility4, 2);
+                          if (text2.toLowerCase() == "unfollow") {
+                            application_channel = IOWebSocketChannel.connect(
+                                "ws://10.0.0.8:8820");
+                            String msg = "Update Chal," + user.name + ",2,0";
+                            application_channel.sink.add(xor_dec_enc(msg));
+                            application_channel.sink.close();
+                          } else {
+                            application_channel = IOWebSocketChannel.connect(
+                                "ws://10.0.0.8:8820");
+                            String msg = "Update Chal," + user.name + ",2,1";
+                            application_channel.sink.add(xor_dec_enc(msg));
+                            application_channel.sink.close();
+                          }
+                        },
+                        child: Text(text2),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         );
@@ -296,7 +298,7 @@ class ChallengesState extends State<Challenges> {
                               ),
                             )
                           : Text(
-                              run_precent.toString() + "%",
+                              (run_precent * 100).toInt().toString() + "%",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15.0,
@@ -373,7 +375,7 @@ class ChallengesState extends State<Challenges> {
                               ),
                             )
                           : Text(
-                              cyc_precent.toString() + "%",
+                              (cyc_precent * 100).toInt().toString() + "%",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15.0,
@@ -467,7 +469,7 @@ class ChallengesState extends State<Challenges> {
                             ),
                           )
                         : Text(
-                            run_precent.toString() + "%",
+                            (run_precent * 100).toInt().toString() + "%",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 15.0,
@@ -544,7 +546,7 @@ class ChallengesState extends State<Challenges> {
                             ),
                           )
                         : Text(
-                            cyc_precent.toString() + "%",
+                            (cyc_precent * 100).toInt().toString() + "%",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 15.0,
@@ -637,7 +639,7 @@ class ChallengesState extends State<Challenges> {
                           ),
                         )
                       : Text(
-                          run_precent.toString() + "%",
+                          (run_precent * 100).toInt().toString() + "%",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 15.0,
@@ -714,7 +716,7 @@ class ChallengesState extends State<Challenges> {
                           ),
                         )
                       : Text(
-                          cyc_precent.toString() + "%",
+                          (cyc_precent * 100).toInt().toString() + "%",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 15.0,

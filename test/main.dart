@@ -1318,8 +1318,8 @@ class AccountDeatilsState extends State<AccountDetails> {
                         if (data == null) {
                           return;
                         } else {
-                          var _detailsChannel = IOWebSocketChannel.connect(
-                              "ws://192.168.7.91:8820");
+                          var _detailsChannel =
+                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                           _detailsChannel.sink
                               .add("Update Name," + user.name + "," + data);
                           _detailsChannel.stream.listen(
@@ -1359,8 +1359,8 @@ class AccountDeatilsState extends State<AccountDetails> {
                         } else if (!isNumeric(data)) {
                           print("NO BONK");
                         } else {
-                          var _detailsChannel = IOWebSocketChannel.connect(
-                              "ws://192.168.7.91:8820");
+                          var _detailsChannel =
+                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                           var dat = user.weight_data.split("/");
                           dat[0] += "-" + data;
                           dat[1] += "+" + DateTime.now().toString();
@@ -1407,8 +1407,8 @@ class AccountDeatilsState extends State<AccountDetails> {
                         } else if (!isNumeric(data)) {
                           print("NO BONK");
                         } else {
-                          var _detailsChannel = IOWebSocketChannel.connect(
-                              "ws://192.168.7.91:8820");
+                          var _detailsChannel =
+                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                           _detailsChannel.sink.add("Update Cal Goal," +
                               user.name +
                               "," +
@@ -1450,8 +1450,8 @@ class AccountDeatilsState extends State<AccountDetails> {
                         } else if (!isNumeric(data)) {
                           print("NO BONK");
                         } else {
-                          var _detailsChannel = IOWebSocketChannel.connect(
-                              "ws://192.168.7.91:8820");
+                          var _detailsChannel =
+                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                           _detailsChannel.sink.add("Update Prot Goal," +
                               user.name +
                               "," +
@@ -1493,8 +1493,8 @@ class AccountDeatilsState extends State<AccountDetails> {
                         } else if (!isNumeric(data)) {
                           print("NO BONK");
                         } else {
-                          var _detailsChannel = IOWebSocketChannel.connect(
-                              "ws://192.168.7.91:8820");
+                          var _detailsChannel =
+                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                           _detailsChannel.sink.add("Update Burned Goal," +
                               user.name +
                               "," +
@@ -1534,8 +1534,8 @@ class AccountDeatilsState extends State<AccountDetails> {
                         if (data == null) {
                           return;
                         } else {
-                          var _detailsChannel = IOWebSocketChannel.connect(
-                              "ws://192.168.7.91:8820");
+                          var _detailsChannel =
+                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                           _detailsChannel.sink.add("Update Pas," +
                               user.name +
                               "," +

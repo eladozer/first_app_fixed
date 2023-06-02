@@ -315,7 +315,6 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
           onPressed: () async {
             var mealPrompt = await openDialog();
             if (mealPrompt == null) {
-              return;
             } else {
               var list;
               if (mealPrompt == null) {

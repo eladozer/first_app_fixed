@@ -56,294 +56,296 @@ class ActivitiesState extends State<Activities> {
         backgroundColor: Color.fromARGB(255, 9, 9, 174),
         automaticallyImplyLeading: false,
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            LinearProgressIndicator(
-              value:
-                  user.cur_burned / user.burned, // current_burned / burned_goal
-              backgroundColor: Colors.grey[300],
-              valueColor: AlwaysStoppedAnimation<Color>(
-                  Color.fromARGB(255, 4, 18, 128)),
-              minHeight: 20.0, // Set the thickness of the progress bar
-            ),
-            Center(
-              child: user.cur_burned / user.burned >= 1
-                  ? Text(
-                      'Current_Burned / Your Burned Goal = ${(100).toInt()}%',
-                      style: TextStyle(fontSize: 14.0),
-                    )
-                  : Text(
-                      'Current_Burned / Your Burned Goal = ${(user.cur_burned / user.burned * 100).toInt()}%',
-                      style: TextStyle(fontSize: 14.0),
-                    ),
-            ),
-            SizedBox(
-              height: 50,
-            ),
-            Align(
-              alignment: Alignment.topCenter,
-              child: DropdownButton(
-                iconSize: 24.0,
-                value: dv,
-                icon: const Icon(Icons.keyboard_arrow_down),
-                // Array list of items
-                items: items.map(
-                  (var items) {
-                    return DropdownMenuItem(
-                      value: items,
-                      child: Text(
-                        items,
-                        style: TextStyle(
-                          fontSize: 14.0, // Set font size
-                          color: Colors.black, // Set font color
-                        ),
-                      ),
-                    );
-                  },
-                ).toList(),
-                onChanged: (var newValue) {
-                  setState(
-                    () {
-                      dv = newValue.toString();
-                      condition = cs.getDur(dv, data);
-                      cond = condition[0];
-                    },
-                  );
-                },
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: DropdownButton(
-                value: cond,
-                icon: const Icon(Icons.keyboard_arrow_down),
-                items: condition.map(
-                  (var condition) {
-                    return DropdownMenuItem(
-                      value: condition,
-                      child: Text(condition),
-                    );
-                  },
-                ).toList(),
-                onChanged: (var newValue) {
-                  setState(
-                    () {
-                      cond = newValue.toString();
-                    },
-                  );
-                },
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: TextField(
-                style: TextStyle(fontSize: 14.0),
-                decoration: InputDecoration(
-                  hintText: "Enter Workout Duration",
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          LinearProgressIndicator(
+            value:
+                user.cur_burned / user.burned, // current_burned / burned_goal
+            backgroundColor: Colors.grey[300],
+            valueColor: user.cur_burned / user.burned < 1
+                ? AlwaysStoppedAnimation<Color>(Color.fromARGB(255, 4, 18, 128))
+                : AlwaysStoppedAnimation<Color>(
+                    Color.fromARGB(255, 9, 216, 19)),
+            minHeight: 20.0, // Set the thickness of the progress bar
+          ),
+          Center(
+            child: user.cur_burned / user.burned >= 1
+                ? Text(
+                    'Current_Burned / Your Burned Goal = ${(100).toInt()}%',
+                    style: TextStyle(fontSize: 14.0),
+                  )
+                : Text(
+                    'Current_Burned / Your Burned Goal = ${(user.cur_burned / user.burned * 100).toInt()}%',
+                    style: TextStyle(fontSize: 14.0),
                   ),
+          ),
+          SizedBox(
+            height: 50,
+          ),
+          Align(
+            alignment: Alignment.topCenter,
+            child: DropdownButton(
+              iconSize: 24.0,
+              value: dv,
+              icon: const Icon(Icons.keyboard_arrow_down),
+              // Array list of items
+              items: items.map(
+                (var items) {
+                  return DropdownMenuItem(
+                    value: items,
+                    child: Text(
+                      items,
+                      style: TextStyle(
+                        fontSize: 14.0, // Set font size
+                        color: Colors.black, // Set font color
+                      ),
+                    ),
+                  );
+                },
+              ).toList(),
+              onChanged: (var newValue) {
+                setState(
+                  () {
+                    dv = newValue.toString();
+                    condition = cs.getDur(dv, data);
+                    cond = condition[0];
+                  },
+                );
+              },
+            ),
+          ),
+          SizedBox(
+            width: 100,
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: DropdownButton(
+              value: cond,
+              icon: const Icon(Icons.keyboard_arrow_down),
+              items: condition.map(
+                (var condition) {
+                  return DropdownMenuItem(
+                    value: condition,
+                    child: Text(condition),
+                  );
+                },
+              ).toList(),
+              onChanged: (var newValue) {
+                setState(
+                  () {
+                    cond = newValue.toString();
+                  },
+                );
+              },
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: TextField(
+              style: TextStyle(fontSize: 14.0),
+              decoration: InputDecoration(
+                hintText: "Enter Workout Duration",
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black),
                 ),
-                controller: control,
               ),
+              controller: control,
             ),
-            SizedBox(
-              height: 100,
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                      Color.fromARGB(
-                          255, 9, 9, 174)), // Set the desired color here
-                ),
-                child: Text("SUBMIT"),
-                onPressed: () {
-                  if (dv == "Activity") {
-                    final snackBar = SnackBar(
-                      content: Text('Cannot Submit Random Activity'),
-                      duration: Duration(seconds: 5),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    Timer(
-                      Duration(seconds: 5),
-                      () {
-                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      },
-                    );
-                  } else if (control.text == "") {
-                    final snackBar = SnackBar(
-                      content: Text('Cannot Submit Timeless Activity'),
-                      duration: Duration(seconds: 5),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    Timer(
-                      Duration(seconds: 5),
-                      () {
-                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      },
-                    );
-                  } else {
-                    var burned = cs.burned(dv, cond, data);
-                    var actual = 0.0;
-                    var distance = 0.0;
-                    if (!control.text.contains("and")) {
-                      var list = control.text.split(" ");
-                      for (int i = 1; i < list.length; i++) {
-                        var numeric = double.parse(list[i - 1]);
-                        if (maxSimilarity(list[i], times) * 100 >= 30) {
-                          String ans = findClosest(list[i], times);
+          ),
+          SizedBox(
+            height: 75,
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(
+                    Color.fromARGB(
+                        255, 9, 9, 174)), // Set the desired color here
+              ),
+              child: Text("SUBMIT"),
+              onPressed: () {
+                if (dv == "Activity") {
+                  final snackBar = SnackBar(
+                    content: Text('Cannot Submit Random Activity'),
+                    duration: Duration(seconds: 5),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  Timer(
+                    Duration(seconds: 5),
+                    () {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    },
+                  );
+                } else if (control.text == "") {
+                  final snackBar = SnackBar(
+                    content: Text('Cannot Submit Timeless Activity'),
+                    duration: Duration(seconds: 5),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  Timer(
+                    Duration(seconds: 5),
+                    () {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    },
+                  );
+                } else {
+                  var burned = cs.burned(dv, cond, data);
+                  var actual = 0.0;
+                  var distance = 0.0;
+                  if (!control.text.contains("and")) {
+                    var list = control.text.split(" ");
+                    for (int i = 1; i < list.length; i++) {
+                      var numeric = double.parse(list[i - 1]);
+                      if (maxSimilarity(list[i], times) * 100 >= 30) {
+                        String ans = findClosest(list[i], times);
+                        if (ans.toLowerCase() == "hour" ||
+                            ans.toLowerCase() == "hours") {
+                          actual = numeric * burned * user.weight;
+                        } else if (ans.toLowerCase() == "minute" ||
+                            ans.toLowerCase() == "minutes") {
+                          actual = numeric * burned * user.weight / 60;
+                        } else if (ans.toLowerCase() == "second" ||
+                            ans.toLowerCase() == "seconds") {
+                          actual = numeric * burned * user.weight / 3600;
+                        }
+                        if (dv.toLowerCase() == "running" &&
+                            cond.contains("kmh")) {
+                          var state = double.parse(cond.split(" ")[1]);
                           if (ans.toLowerCase() == "hour" ||
                               ans.toLowerCase() == "hours") {
-                            actual = numeric * burned * user.weight;
+                            distance += state * numeric;
                           } else if (ans.toLowerCase() == "minute" ||
                               ans.toLowerCase() == "minutes") {
-                            actual = numeric * burned * user.weight / 60;
+                            distance += state * numeric / 60;
                           } else if (ans.toLowerCase() == "second" ||
                               ans.toLowerCase() == "seconds") {
-                            actual = numeric * burned * user.weight / 3600;
+                            distance += state * numeric / 3600;
                           }
-                          if (dv.toLowerCase() == "running" &&
-                              cond.contains("kmh")) {
-                            var state = double.parse(cond.split(" ")[1]);
-                            if (ans.toLowerCase() == "hour" ||
-                                ans.toLowerCase() == "hours") {
-                              distance += state * numeric;
-                            } else if (ans.toLowerCase() == "minute" ||
-                                ans.toLowerCase() == "minutes") {
-                              distance += state * numeric / 60;
-                            } else if (ans.toLowerCase() == "second" ||
-                                ans.toLowerCase() == "seconds") {
-                              distance += state * numeric / 3600;
-                            }
-                          } else if (dv.toLowerCase() == "cycling" &&
-                              cond.contains("kmh")) {
-                            var state = cond.split(" ")[1];
-                            distance += cycling_dis(state, list.join(" "));
-                          }
+                        } else if (dv.toLowerCase() == "cycling" &&
+                            cond.contains("kmh")) {
+                          var state = cond.split(" ")[1];
+                          distance += cycling_dis(state, list.join(" "));
                         }
                       }
-                    } else {
-                      var time_list = control.text.split("and");
-                      for (int i = 0; i < time_list.length; i++) {
-                        var list = time_list[i];
-                        double numeric =
-                            double.parse(list.replaceAll(RegExp('[^0-9]'), ''));
-                        String result =
-                            list.replaceAll(RegExp(r'[^a-zA-Z]'), '');
-                        if (maxSimilarity(result, times) * 100 >= 30) {
-                          result = findClosest(result, times);
+                    }
+                  } else {
+                    var time_list = control.text.split("and");
+                    for (int i = 0; i < time_list.length; i++) {
+                      var list = time_list[i];
+                      double numeric =
+                          double.parse(list.replaceAll(RegExp('[^0-9]'), ''));
+                      String result = list.replaceAll(RegExp(r'[^a-zA-Z]'), '');
+                      if (maxSimilarity(result, times) * 100 >= 30) {
+                        result = findClosest(result, times);
+                        if (result.toLowerCase() == "hour" ||
+                            result.toLowerCase() == "hours") {
+                          actual += numeric * burned * user.weight;
+                        } else if (result.toLowerCase() == "minute" ||
+                            result.toLowerCase() == "minutes") {
+                          actual += numeric * burned * user.weight / 60;
+                        } else if (result.toLowerCase() == "second" ||
+                            result.toLowerCase() == "seconds") {
+                          actual += numeric * burned * user.weight / 3600;
+                        }
+                        if (dv.toLowerCase() == "running" &&
+                            cond.contains("kmh")) {
+                          var state = double.parse(cond.split(" ")[1]);
                           if (result.toLowerCase() == "hour" ||
                               result.toLowerCase() == "hours") {
-                            actual += numeric * burned * user.weight;
+                            distance += state * numeric;
                           } else if (result.toLowerCase() == "minute" ||
                               result.toLowerCase() == "minutes") {
-                            actual += numeric * burned * user.weight / 60;
+                            distance += state * numeric / 60;
                           } else if (result.toLowerCase() == "second" ||
                               result.toLowerCase() == "seconds") {
-                            actual += numeric * burned * user.weight / 3600;
+                            distance += state * numeric / 3600;
                           }
-                          if (dv.toLowerCase() == "running" &&
-                              cond.contains("kmh")) {
-                            var state = double.parse(cond.split(" ")[1]);
-                            if (result.toLowerCase() == "hour" ||
-                                result.toLowerCase() == "hours") {
-                              distance += state * numeric;
-                            } else if (result.toLowerCase() == "minute" ||
-                                result.toLowerCase() == "minutes") {
-                              distance += state * numeric / 60;
-                            } else if (result.toLowerCase() == "second" ||
-                                result.toLowerCase() == "seconds") {
-                              distance += state * numeric / 3600;
-                            }
-                          } else if (dv.toLowerCase() == "cycling" &&
-                              cond.contains("kmh")) {
-                            var state = cond.split(" ")[1];
-                            distance += cycling_dis(state, list);
-                          }
+                        } else if (dv.toLowerCase() == "cycling" &&
+                            cond.contains("kmh")) {
+                          var state = cond.split(" ")[1];
+                          distance += cycling_dis(state, list);
                         }
                       }
                     }
-                    var to_decrease = actual / 300 * 0.039;
-                    user.set_weight(-to_decrease);
-                    List weight_data_split = user.weight_data.split("/");
-                    weight_data_split[0] += "-" + user.weight.toString();
-                    weight_data_split[1] += "+" + DateTime.now().toString();
-                    user.set_weight_data(weight_data_split.join("/"));
-                    var weit_chan =
-                        IOWebSocketChannel.connect("ws://10.0.0.8:8820");
-                    String message = "Update Weight," +
+                  }
+                  var to_decrease = actual / 300 * 0.039;
+                  user.set_weight(-to_decrease);
+                  List weight_data_split = user.weight_data.split("/");
+                  weight_data_split[0] += "-" + user.weight.toString();
+                  weight_data_split[1] += "+" + DateTime.now().toString();
+                  user.set_weight_data(weight_data_split.join("/"));
+                  var weit_chan =
+                      IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                  String message = "Update Weight," +
+                      user.name +
+                      "," +
+                      user.weight.toString();
+                  weit_chan.sink.add(xor_dec_enc(message));
+                  weit_chan.stream.listen(
+                    (msg1) {
+                      print("Recieved Message: ${xor_dec_enc(msg1)}");
+                    },
+                  );
+                  // 300 cal = 0.039 kg
+                  String msg = "";
+                  if (dv.toLowerCase() == "running" && cond.contains("kmh")) {
+                    user.set_running(distance.toInt());
+                  } else if (dv.toLowerCase() == "cycling" &&
+                      cond.contains("kmh")) {
+                    user.set_cycling(distance.toInt());
+                  }
+                  _increaseCurBurn(actual.toInt());
+                  var _detailsChannel =
+                      IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                  if (dv.toLowerCase().contains("running")) {
+                    msg = "running," +
                         user.name +
                         "," +
-                        user.weight.toString();
-                    weit_chan.sink.add(xor_dec_enc(message));
-                    weit_chan.stream.listen(
-                      (msg1) {
-                        print("Recieved Message: ${xor_dec_enc(msg1)}");
-                      },
-                    );
-                    // 300 cal = 0.039 kg
-                    String msg = "";
-                    if (dv.toLowerCase() == "running" && cond.contains("kmh")) {
-                      user.set_running(distance.toInt());
-                    } else if (dv.toLowerCase() == "cycling" &&
-                        cond.contains("kmh")) {
-                      user.set_cycling(distance.toInt());
-                    }
-                    _increaseCurBurn(actual.toInt());
-                    var _detailsChannel =
-                        IOWebSocketChannel.connect("ws://10.0.0.8:8820");
-                    if (dv.toLowerCase().contains("running")) {
-                      msg = "running," +
-                          user.name +
-                          "," +
-                          actual.toInt().toString() +
-                          "," +
-                          distance.toInt().toString();
-                    } else if (dv.toLowerCase() == "cycling") {
-                      msg = "cycling," +
-                          user.name +
-                          "," +
-                          actual.toInt().toString() +
-                          "," +
-                          distance.toInt().toString();
-                    } else {
-                      msg = "Random Activity," +
-                          dv.toString() +
-                          "," +
-                          user.name +
-                          "," +
-                          actual.toInt().toString();
-                    }
-                    _detailsChannel.sink.add(xor_dec_enc(msg));
-                    _detailsChannel.stream.listen(
-                      (message) {
-                        print("Message: ${xor_dec_enc(message)}");
-                      },
-                    );
-                    _detailsChannel.sink.close();
-                    user.set_activity_data(
-                        dv.toString() + "-" + actual.toInt().toString());
-                    final snackBar = SnackBar(
-                      content: Text('Activity Submitted'),
-                      duration: Duration(seconds: 5),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    Timer(
-                      Duration(seconds: 5),
-                      () {
-                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      },
-                    );
+                        actual.toInt().toString() +
+                        "," +
+                        distance.toInt().toString();
+                  } else if (dv.toLowerCase() == "cycling") {
+                    msg = "cycling," +
+                        user.name +
+                        "," +
+                        actual.toInt().toString() +
+                        "," +
+                        distance.toInt().toString();
+                  } else {
+                    msg = "Random Activity," +
+                        dv.toString() +
+                        "," +
+                        user.name +
+                        "," +
+                        actual.toInt().toString();
                   }
-                },
-              ),
+                  _detailsChannel.sink.add(xor_dec_enc(msg));
+                  _detailsChannel.stream.listen(
+                    (message) {
+                      print("Message: ${xor_dec_enc(message)}");
+                    },
+                  );
+                  _detailsChannel.sink.close();
+                  user.set_activity_data(
+                      dv.toString() + "-" + actual.toInt().toString());
+                  final snackBar = SnackBar(
+                    content: Text('Activity Submitted'),
+                    duration: Duration(seconds: 5),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  Timer(
+                    Duration(seconds: 5),
+                    () {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    },
+                  );
+                }
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

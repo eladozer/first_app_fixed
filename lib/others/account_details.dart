@@ -2,6 +2,7 @@ import 'package:first_app/login_register/login.dart';
 import 'package:first_app/others/encryption.dart';
 import 'package:first_app/others/user.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:web_socket_channel/io.dart';
 
 class AccountDetails extends StatefulWidget {
@@ -29,15 +30,22 @@ class AccountDeatilsState extends State<AccountDetails> {
     print("Exited Data");
   }
 
-  Future openDialog() => showDialog(
+  Future openDialog(int command) => showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: Text("Change Data", textAlign: TextAlign.center),
-          content: TextField(
-            autofocus: true,
-            decoration: InputDecoration(hintText: "Enter New Value"),
-            controller: control,
-          ),
+          content: command == 1 || command == 6
+              ? TextField(
+                  autofocus: true,
+                  decoration: InputDecoration(hintText: "Enter New Value"),
+                  controller: control,
+                )
+              : TextField(
+                  keyboardType: TextInputType.number,
+                  autofocus: true,
+                  decoration: InputDecoration(hintText: "Enter New Value"),
+                  controller: control,
+                ),
           actions: [TextButton(onPressed: submit, child: Text("SUBMIT"))],
         ),
       );
@@ -119,12 +127,12 @@ class AccountDeatilsState extends State<AccountDetails> {
                             Colors.green), // Set the desired color here
                       ),
                       onPressed: () async {
-                        var data = await openDialog();
+                        var data = await openDialog(1);
                         if (data == null) {
                           return;
                         } else {
-                          var _detailsChannel = IOWebSocketChannel.connect(
-                              "ws://192.168.7.91:8820");
+                          var _detailsChannel =
+                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                           _detailsChannel.sink.add(xor_dec_enc(
                               "Update Name," + user.name + "," + data));
                           _detailsChannel.stream.listen(
@@ -162,7 +170,7 @@ class AccountDeatilsState extends State<AccountDetails> {
                             Colors.green), // Set the desired color here
                       ),
                       onPressed: () async {
-                        var data = await openDialog();
+                        var data = await openDialog(2);
                         if (data == null) {
                           return;
                         } else if (!isNumeric(data)) {
@@ -170,8 +178,8 @@ class AccountDeatilsState extends State<AccountDetails> {
                         } else if (int.parse(data) == 0) {
                           return;
                         } else {
-                          var _detailsChannel = IOWebSocketChannel.connect(
-                              "ws://192.168.7.91:8820");
+                          var _detailsChannel =
+                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                           var dat = user.weight_data.split("/");
                           dat[0] += "-" + data;
                           dat[1] += "+" + DateTime.now().toString();
@@ -217,7 +225,7 @@ class AccountDeatilsState extends State<AccountDetails> {
                             Colors.green), // Set the desired color here
                       ),
                       onPressed: () async {
-                        var data = await openDialog();
+                        var data = await openDialog(3);
                         if (data == null) {
                           return;
                         } else if (!isNumeric(data)) {
@@ -225,8 +233,8 @@ class AccountDeatilsState extends State<AccountDetails> {
                         } else if (int.parse(data) == 0) {
                           return;
                         } else {
-                          var _detailsChannel = IOWebSocketChannel.connect(
-                              "ws://192.168.7.91:8820");
+                          var _detailsChannel =
+                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                           _detailsChannel.sink.add(xor_dec_enc(
                               "Update Cal Goal," +
                                   user.name +
@@ -267,7 +275,7 @@ class AccountDeatilsState extends State<AccountDetails> {
                             Colors.green), // Set the desired color here
                       ),
                       onPressed: () async {
-                        var data = await openDialog();
+                        var data = await openDialog(4);
                         if (data == null) {
                           return;
                         } else if (!isNumeric(data)) {
@@ -275,8 +283,8 @@ class AccountDeatilsState extends State<AccountDetails> {
                         } else if (int.parse(data) == 0) {
                           return;
                         } else {
-                          var _detailsChannel = IOWebSocketChannel.connect(
-                              "ws://192.168.7.91:8820");
+                          var _detailsChannel =
+                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                           _detailsChannel.sink.add(xor_dec_enc(
                               "Update Prot Goal," +
                                   user.name +
@@ -317,7 +325,7 @@ class AccountDeatilsState extends State<AccountDetails> {
                             Colors.green), // Set the desired color here
                       ),
                       onPressed: () async {
-                        var data = await openDialog();
+                        var data = await openDialog(5);
                         if (data == null) {
                           return;
                         } else if (!isNumeric(data)) {
@@ -325,8 +333,8 @@ class AccountDeatilsState extends State<AccountDetails> {
                         } else if (int.parse(data) == 0) {
                           return;
                         } else {
-                          var _detailsChannel = IOWebSocketChannel.connect(
-                              "ws://192.168.7.91:8820");
+                          var _detailsChannel =
+                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                           _detailsChannel.sink.add(xor_dec_enc(
                               "Update Burned Goal," +
                                   user.name +
@@ -367,12 +375,12 @@ class AccountDeatilsState extends State<AccountDetails> {
                             Colors.green), // Set the desired color here
                       ),
                       onPressed: () async {
-                        var data = await openDialog();
+                        var data = await openDialog(6);
                         if (data == null) {
                           return;
                         } else {
-                          var _detailsChannel = IOWebSocketChannel.connect(
-                              "ws://192.168.7.91:8820");
+                          var _detailsChannel =
+                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                           _detailsChannel.sink.add(xor_dec_enc("Update Pas," +
                               user.name +
                               "," +

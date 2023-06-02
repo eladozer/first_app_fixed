@@ -1322,8 +1322,8 @@ class AccountDeatilsState extends State<AccountDetails> {
                         if (data == null) {
                           return;
                         } else {
-                          var _detailsChannel = IOWebSocketChannel.connect(
-                              "ws://192.168.7.91:8820");
+                          var _detailsChannel =
+                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                           _detailsChannel.sink.add(xor_dec_enc(
                               "Update Name," + user.name + "," + data));
                           _detailsChannel.stream.listen(
@@ -1370,8 +1370,8 @@ class AccountDeatilsState extends State<AccountDetails> {
                         } else if (int.parse(data) == 0) {
                           return;
                         } else {
-                          var _detailsChannel = IOWebSocketChannel.connect(
-                              "ws://192.168.7.91:8820");
+                          var _detailsChannel =
+                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                           var dat = user.weight_data.split("/");
                           dat[0] += "-" + data;
                           dat[1] += "+" + DateTime.now().toString();
@@ -1426,8 +1426,8 @@ class AccountDeatilsState extends State<AccountDetails> {
                         } else if (int.parse(data) == 0) {
                           return;
                         } else {
-                          var _detailsChannel = IOWebSocketChannel.connect(
-                              "ws://192.168.7.91:8820");
+                          var _detailsChannel =
+                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                           _detailsChannel.sink.add(xor_dec_enc(
                               "Update Cal Goal," +
                                   user.name +
@@ -1477,8 +1477,8 @@ class AccountDeatilsState extends State<AccountDetails> {
                         } else if (int.parse(data) == 0) {
                           return;
                         } else {
-                          var _detailsChannel = IOWebSocketChannel.connect(
-                              "ws://192.168.7.91:8820");
+                          var _detailsChannel =
+                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                           _detailsChannel.sink.add(xor_dec_enc(
                               "Update Prot Goal," +
                                   user.name +
@@ -1528,8 +1528,8 @@ class AccountDeatilsState extends State<AccountDetails> {
                         } else if (int.parse(data) == 0) {
                           return;
                         } else {
-                          var _detailsChannel = IOWebSocketChannel.connect(
-                              "ws://192.168.7.91:8820");
+                          var _detailsChannel =
+                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                           _detailsChannel.sink.add(xor_dec_enc(
                               "Update Burned Goal," +
                                   user.name +
@@ -1575,8 +1575,8 @@ class AccountDeatilsState extends State<AccountDetails> {
                         if (data == null) {
                           return;
                         } else {
-                          var _detailsChannel = IOWebSocketChannel.connect(
-                              "ws://192.168.7.91:8820");
+                          var _detailsChannel =
+                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                           _detailsChannel.sink.add(xor_dec_enc("Update Pas," +
                               user.name +
                               "," +
