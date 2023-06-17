@@ -944,8 +944,8 @@ class RegState extends State<Register> {
                             int.parse(ctrl2.text) == 0 ||
                             int.parse(ctrl1.text) == 0) {
                         } else {
-                          _regChannel = IOWebSocketChannel.connect(
-                              "ws://192.168.7.91:8820");
+                          _regChannel =
+                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                           String message =
                               "Register,${control.text},${generateMd5(ctrl.text)},${cntl.text},${control2.text},${ctrl2.text},${ctrl1.text}";
                           _regChannel.sink.add(xor_dec_enc(message));
@@ -1785,14 +1785,14 @@ class ChallengesState extends State<Challenges> {
                       onPressed: () {
                         change_chal(text1, visibility3, 1);
                         if (text1.toLowerCase() == "unfollow") {
-                          application_channel = IOWebSocketChannel.connect(
-                              "ws://192.168.7.91:8820");
+                          application_channel =
+                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                           String msg = "Update Chal," + user.name + ",1,0";
                           application_channel.sink.add(xor_dec_enc(msg));
                           application_channel.sink.close();
                         } else {
-                          application_channel = IOWebSocketChannel.connect(
-                              "ws://192.168.7.91:8820");
+                          application_channel =
+                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                           String msg = "Update Chal," + user.name + ",1,1";
                           application_channel.sink.add(xor_dec_enc(msg));
                           application_channel.sink.close();
@@ -1858,14 +1858,14 @@ class ChallengesState extends State<Challenges> {
                       onPressed: () {
                         change_chal(text2, visibility4, 2);
                         if (text2.toLowerCase() == "unfollow") {
-                          application_channel = IOWebSocketChannel.connect(
-                              "ws://192.168.7.91:8820");
+                          application_channel =
+                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                           String msg = "Update Chal," + user.name + ",2,0";
                           application_channel.sink.add(xor_dec_enc(msg));
                           application_channel.sink.close();
                         } else {
-                          application_channel = IOWebSocketChannel.connect(
-                              "ws://192.168.7.91:8820");
+                          application_channel =
+                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                           String msg = "Update Chal," + user.name + ",2,1";
                           application_channel.sink.add(xor_dec_enc(msg));
                           application_channel.sink.close();
@@ -1947,14 +1947,14 @@ class ChallengesState extends State<Challenges> {
                       onPressed: () {
                         change_chal(text1, visibility3, 1);
                         if (text1.toLowerCase() == "unfollow") {
-                          application_channel = IOWebSocketChannel.connect(
-                              "ws://192.168.7.91:8820");
+                          application_channel =
+                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                           String msg = "Update Chal," + user.name + ",1,0";
                           application_channel.sink.add(xor_dec_enc(msg));
                           application_channel.sink.close();
                         } else {
-                          application_channel = IOWebSocketChannel.connect(
-                              "ws://192.168.7.91:8820");
+                          application_channel =
+                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                           String msg = "Update Chal," + user.name + ",1,1";
                           application_channel.sink.add(xor_dec_enc(msg));
                           application_channel.sink.close();
@@ -2020,14 +2020,14 @@ class ChallengesState extends State<Challenges> {
                       onPressed: () {
                         change_chal(button_text2, visibility2, 2);
                         if (button_text2.toLowerCase() == "unfollow") {
-                          application_channel = IOWebSocketChannel.connect(
-                              "ws://192.168.7.91:8820");
+                          application_channel =
+                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                           String msg = "Update Chal," + user.name + ",2,0";
                           application_channel.sink.add(xor_dec_enc(msg));
                           application_channel.sink.close();
                         } else {
-                          application_channel = IOWebSocketChannel.connect(
-                              "ws://192.168.7.91:8820");
+                          application_channel =
+                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                           String msg = "Update Chal," + user.name + ",2,1";
                           application_channel.sink.add(xor_dec_enc(msg));
                           application_channel.sink.close();

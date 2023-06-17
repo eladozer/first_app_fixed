@@ -38,110 +38,117 @@ class FoodDataState extends State<FoodData> {
         dat2.add([changed[0], changed[1], changed[2], changed[3]]);
       }
     }
-    print(dat2);
     return Scaffold(
+      backgroundColor: Colors.indigo[300],
       appBar: AppBar(
         centerTitle: true,
         title: Text(
           'CaloCalc - Food Data',
-          style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 30.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.blue[500],
+          ),
         ),
         backgroundColor: Colors.cyan,
         automaticallyImplyLeading: false,
       ),
-      body: Table(
-        columnWidths: {
-          0: FractionColumnWidth(0.25),
-          1: FractionColumnWidth(0.25),
-          2: FractionColumnWidth(0.25),
-          3: FractionColumnWidth(0.25),
-        },
-        border: TableBorder.all(
-          color: Colors.black,
-          width: 3.0,
-          style: BorderStyle.solid,
-        ),
-        children: [
-          TableRow(
-            children: [
-              TableCell(
-                child: Text(
-                  'Date',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-              TableCell(
-                child: Text(
-                  'Cal Goal',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-              TableCell(
-                child: Text(
-                  'Prot Goal',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-              TableCell(
-                child: Text(
-                  'Burn Goal',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-            ],
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Table(
+          columnWidths: {
+            0: FractionColumnWidth(0.25),
+            1: FractionColumnWidth(0.25),
+            2: FractionColumnWidth(0.25),
+            3: FractionColumnWidth(0.25),
+          },
+          border: TableBorder.all(
+            color: Colors.black,
+            width: 3.0,
+            style: BorderStyle.solid,
           ),
-          ...List<TableRow>.generate(
-            dat2.length,
-            (index) => TableRow(
+          children: [
+            TableRow(
               children: [
                 TableCell(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      dat2[index][0],
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
+                  child: Text(
+                    'Date',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
                 TableCell(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      dat2[index][1],
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
+                  child: Text(
+                    'Calorie Goal',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
                 TableCell(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      dat2[index][2],
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
+                  child: Text(
+                    'Protein Goal',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
                 TableCell(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      dat2[index][3],
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
+                  child: Text(
+                    'Calories Burned Goal',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
             ),
-          ),
-        ],
+            ...List<TableRow>.generate(
+              dat2.length,
+              (index) => TableRow(
+                children: [
+                  TableCell(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        dat2[index][0],
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  TableCell(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        dat2[index][1],
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  TableCell(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        dat2[index][2],
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  TableCell(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        dat2[index][3],
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

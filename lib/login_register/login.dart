@@ -3,25 +3,30 @@ import 'package:first_app/others/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:web_socket_channel/io.dart';
-import 'package:crypto/crypto.dart';
-import 'dart:convert';
 import 'package:first_app/others/user.dart';
 import 'package:first_app/others/encryption.dart';
+import '../others/ip_page.dart';
 
 String url = "https://api.api-ninjas.com/v1/nutrition?query=";
 
 class Login extends StatefulWidget {
+  var adr = "";
+  Login(var ad) {
+    adr = ad;
+  }
   @override
   LoginState createState() => LoginState();
 }
 
 class LoginState extends State<Login> {
   var _LogChannel;
+  var adr = "";
   final control = TextEditingController();
   final ctrl = TextEditingController();
   @override
   void initState() {
     super.initState();
+    adr = widget.adr;
     print("Entered Login");
   }
 
@@ -36,13 +41,14 @@ class LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.cyan[200],
       appBar: AppBar(
         centerTitle: true,
         title: Text(
           'CaloCalc - Login',
           style: TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold),
         ),
+        backgroundColor: Colors.teal,
         automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
@@ -86,11 +92,14 @@ class LoginState extends State<Login> {
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (_) => Register()));
+                    context, MaterialPageRoute(builder: (_) => Register(adr)));
               },
               child: Text(
                 'Register',
                 style: TextStyle(color: Colors.white, fontSize: 15),
+              ),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.teal),
               ),
             ),
             SizedBox(
@@ -103,8 +112,7 @@ class LoginState extends State<Login> {
                   color: Colors.blue, borderRadius: BorderRadius.circular(20)),
               child: ElevatedButton(
                 onPressed: () {
-                  _LogChannel =
-                      IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                  _LogChannel = IOWebSocketChannel.connect("ws://${adr}:8820");
                   var sub;
                   String message =
                       "Login,${control.text},${generateMd5(ctrl.text)}";
@@ -141,7 +149,7 @@ class LoginState extends State<Login> {
                           PageRouteBuilder(
                             pageBuilder:
                                 (context, animation, secondaryAnimation) =>
-                                    BottomNavi(u1),
+                                    BottomNavi(u1, adr),
                             transitionsBuilder: (context, animation,
                                 secondaryAnimation, child) {
                               var begin = Offset(1.0, 0.0);
@@ -177,6 +185,31 @@ class LoginState extends State<Login> {
                 child: Text(
                   'Login',
                   style: TextStyle(color: Colors.white, fontSize: 40),
+                ),
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.teal),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 50,
+            ),
+            Container(
+              height: 30,
+              width: 150,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (_) => IP()));
+                },
+                child: Text(
+                  'Enter New IP',
+                  style: TextStyle(color: Colors.white, fontSize: 15),
+                ),
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.teal),
                 ),
               ),
             ),

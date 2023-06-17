@@ -1,7 +1,6 @@
 import 'dart:io';
-
+import 'package:first_app/others/ip_page.dart';
 import 'package:flutter/material.dart';
-import 'package:first_app/login_register/login.dart';
 
 void main() {
   runApp(App());
@@ -18,6 +17,6 @@ class App extends StatefulWidget {
 class AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: Login());
+    return MaterialApp(debugShowCheckedModeBanner: false, home: IP());
   }
 }

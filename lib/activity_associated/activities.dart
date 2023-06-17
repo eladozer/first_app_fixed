@@ -9,8 +9,10 @@ import 'package:first_app/others/encryption.dart';
 
 class Activities extends StatefulWidget {
   User u1 = User("", 0, 0, 0, 0, 0, "", "", "", "", 0, 0, 0, 0, 0, 0);
-  Activities(User u2) {
+  var adr;
+  Activities(User u2, var ad) {
     u1 = u2;
+    adr = ad;
   }
   @override
   ActivitiesState createState() => ActivitiesState();
@@ -18,6 +20,7 @@ class Activities extends StatefulWidget {
 
 class ActivitiesState extends State<Activities> {
   User user = User("", 0, 0, 0, 0, 0, "", "", "", "", 0, 0, 0, 0, 0, 0);
+  var adr;
   List<List<dynamic>> data = [];
   var control = TextEditingController();
   var items = [];
@@ -29,6 +32,7 @@ class ActivitiesState extends State<Activities> {
   void initState() {
     super.initState();
     user = widget.u1;
+    adr = widget.adr;
     print("Entered Activities");
   }
 
@@ -51,7 +55,11 @@ class ActivitiesState extends State<Activities> {
         centerTitle: true,
         title: Text(
           'CaloCalc - Activities',
-          style: TextStyle(fontSize: 35.0, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 35.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.blue[500],
+          ),
         ),
         backgroundColor: Color.fromARGB(255, 9, 9, 174),
         automaticallyImplyLeading: false,
@@ -270,24 +278,6 @@ class ActivitiesState extends State<Activities> {
                       }
                     }
                   }
-                  var to_decrease = actual / 300 * 0.039;
-                  user.set_weight(-to_decrease);
-                  List weight_data_split = user.weight_data.split("/");
-                  weight_data_split[0] += "-" + user.weight.toString();
-                  weight_data_split[1] += "+" + DateTime.now().toString();
-                  user.set_weight_data(weight_data_split.join("/"));
-                  var weit_chan =
-                      IOWebSocketChannel.connect("ws://10.0.0.8:8820");
-                  String message = "Update Weight," +
-                      user.name +
-                      "," +
-                      user.weight.toString();
-                  weit_chan.sink.add(xor_dec_enc(message));
-                  weit_chan.stream.listen(
-                    (msg1) {
-                      print("Recieved Message: ${xor_dec_enc(msg1)}");
-                    },
-                  );
                   // 300 cal = 0.039 kg
                   String msg = "";
                   if (dv.toLowerCase() == "running" && cond.contains("kmh")) {
@@ -298,7 +288,7 @@ class ActivitiesState extends State<Activities> {
                   }
                   _increaseCurBurn(actual.toInt());
                   var _detailsChannel =
-                      IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                      IOWebSocketChannel.connect("ws://${adr}:8820");
                   if (dv.toLowerCase().contains("running")) {
                     msg = "running," +
                         user.name +
@@ -430,3 +420,23 @@ class ActivitiesState extends State<Activities> {
     return ans;
   }
 }
+
+/*var to_decrease = actual / 300 * 0.039;
+                  user.set_weight(-to_decrease);
+                  List weight_data_split = user.weight_data.split("/");
+                  weight_data_split[0] += "-" + user.weight.toString();
+                  weight_data_split[1] += "+" + DateTime.now().toString();
+                  user.set_weight_data(weight_data_split.join("/"));
+                  var weit_chan =
+                      IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                  String message = "Update Weight," +
+                      user.name +
+                      "," +
+                      user.weight.toString();
+                  weit_chan.sink.add(xor_dec_enc(message));
+                  weit_chan.stream.listen(
+                    (msg1) {
+                      print("Recieved Message: ${xor_dec_enc(msg1)}");
+                    },
+                  );
+                  */

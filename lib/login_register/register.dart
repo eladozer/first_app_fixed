@@ -6,11 +6,16 @@ import 'package:first_app/others/user.dart';
 import 'package:first_app/others/encryption.dart';
 
 class Register extends StatefulWidget {
+  var adr = "";
+  Register(var ad) {
+    adr = ad;
+  }
   @override
   RegState createState() => RegState();
 }
 
 class RegState extends State<Register> {
+  var adr;
   var _regChannel;
   final control = TextEditingController();
   final ctrl = TextEditingController();
@@ -20,6 +25,7 @@ class RegState extends State<Register> {
   final ctrl1 = TextEditingController();
   @override
   void initState() {
+    adr = widget.adr;
     super.initState();
     print("Entered Register");
   }
@@ -40,13 +46,14 @@ class RegState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.purple[300],
       appBar: AppBar(
         centerTitle: true,
         title: Text(
           'CaloCalc - Register',
-          style: TextStyle(fontSize: 35.0, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
         ),
+        backgroundColor: Colors.purple,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -155,10 +162,10 @@ class RegState extends State<Register> {
             ),
             ElevatedButton(
               onPressed: () {
-                if (control.text == " ") {
+                if (control.text == "") {
+                  print("NO DATA");
                 } else {
-                  var channel =
-                      IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                  var channel = IOWebSocketChannel.connect("ws://${adr}:8820");
                   String msg = "In User,${control.text}";
                   channel.sink.add(xor_dec_enc(msg));
                   channel.stream.listen(
@@ -174,8 +181,8 @@ class RegState extends State<Register> {
                             int.parse(ctrl2.text) == 0 ||
                             int.parse(ctrl1.text) == 0) {
                         } else {
-                          _regChannel = IOWebSocketChannel.connect(
-                              "ws://192.168.7.91:8820");
+                          _regChannel =
+                              IOWebSocketChannel.connect("ws://${adr}:8820");
                           String message =
                               "Register,${control.text},${generateMd5(ctrl.text)},${cntl.text},${control2.text},${ctrl2.text},${ctrl1.text}";
                           _regChannel.sink.add(xor_dec_enc(message));
@@ -211,7 +218,7 @@ class RegState extends State<Register> {
                                   PageRouteBuilder(
                                     pageBuilder: (context, animation,
                                             secondaryAnimation) =>
-                                        BottomNavi(u1),
+                                        BottomNavi(u1, adr),
                                     transitionsBuilder: (context, animation,
                                         secondaryAnimation, child) {
                                       var begin = Offset(1.0, 0.0);
@@ -252,6 +259,10 @@ class RegState extends State<Register> {
                 }
               },
               child: Text("Register"),
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(Colors.purple),
+              ),
             ),
           ],
         ),

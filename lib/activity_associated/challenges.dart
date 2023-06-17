@@ -6,8 +6,10 @@ import 'package:first_app/others/encryption.dart';
 
 class Challenges extends StatefulWidget {
   User u1 = User("", 0, 0, 0, 0, 0, "", "", "", "", 0, 0, 0, 0, 0, 0);
-  Challenges(User u2) {
+  var adr;
+  Challenges(User u2, var ad) {
     u1 = u2;
+    adr = ad;
   }
   @override
   ChallengesState createState() => ChallengesState();
@@ -15,6 +17,7 @@ class Challenges extends StatefulWidget {
 
 class ChallengesState extends State<Challenges> {
   User user = User("", 0, 0, 0, 0, 0, "", "", "", "", 0, 0, 0, 0, 0, 0);
+  var adr;
   String button_text1 = "Follow";
   String button_text2 = "Follow";
   String text1 = "Unfollow";
@@ -28,7 +31,11 @@ class ChallengesState extends State<Challenges> {
     centerTitle: true,
     title: Text(
       'CaloCalc - Monthly Challenge',
-      style: TextStyle(fontSize: 27.0, fontWeight: FontWeight.bold),
+      style: TextStyle(
+        fontSize: 27.0,
+        fontWeight: FontWeight.bold,
+        color: Colors.blue[500],
+      ),
     ),
     backgroundColor: Colors.cyan,
     automaticallyImplyLeading: false,
@@ -65,6 +72,7 @@ class ChallengesState extends State<Challenges> {
   void initState() {
     super.initState();
     user = widget.u1;
+    adr = widget.adr;
     print("Entered Challenges");
   }
 
@@ -81,6 +89,7 @@ class ChallengesState extends State<Challenges> {
     if (user.challenge_one == true) {
       if (user.challenge_two == true) {
         return Scaffold(
+          backgroundColor: Colors.teal,
           appBar: bar,
           body: Container(
             padding: EdgeInsets.all(16.0),
@@ -152,14 +161,14 @@ class ChallengesState extends State<Challenges> {
                         onPressed: () {
                           change_chal(text1, visibility3, 1);
                           if (text1.toLowerCase() == "unfollow") {
-                            application_channel = IOWebSocketChannel.connect(
-                                "ws://10.0.0.8:8820");
+                            application_channel =
+                                IOWebSocketChannel.connect("ws://${adr}:8820");
                             String msg = "Update Chal," + user.name + ",1,0";
                             application_channel.sink.add(xor_dec_enc(msg));
                             application_channel.sink.close();
                           } else {
-                            application_channel = IOWebSocketChannel.connect(
-                                "ws://10.0.0.8:8820");
+                            application_channel =
+                                IOWebSocketChannel.connect("ws://${adr}:8820");
                             String msg = "Update Chal," + user.name + ",1,1";
                             application_channel.sink.add(xor_dec_enc(msg));
                             application_channel.sink.close();
@@ -229,14 +238,14 @@ class ChallengesState extends State<Challenges> {
                         onPressed: () {
                           change_chal(text2, visibility4, 2);
                           if (text2.toLowerCase() == "unfollow") {
-                            application_channel = IOWebSocketChannel.connect(
-                                "ws://10.0.0.8:8820");
+                            application_channel =
+                                IOWebSocketChannel.connect("ws://${adr}:8820");
                             String msg = "Update Chal," + user.name + ",2,0";
                             application_channel.sink.add(xor_dec_enc(msg));
                             application_channel.sink.close();
                           } else {
-                            application_channel = IOWebSocketChannel.connect(
-                                "ws://10.0.0.8:8820");
+                            application_channel =
+                                IOWebSocketChannel.connect("ws://${adr}:8820");
                             String msg = "Update Chal," + user.name + ",2,1";
                             application_channel.sink.add(xor_dec_enc(msg));
                             application_channel.sink.close();
@@ -253,6 +262,7 @@ class ChallengesState extends State<Challenges> {
         );
       } else {
         return Scaffold(
+          backgroundColor: Colors.teal,
           appBar: bar,
           body: Container(
             padding: EdgeInsets.all(16.0),
@@ -324,13 +334,13 @@ class ChallengesState extends State<Challenges> {
                         change_chal(text1, visibility3, 1);
                         if (text1.toLowerCase() == "unfollow") {
                           application_channel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                              IOWebSocketChannel.connect("ws://${adr}:8820");
                           String msg = "Update Chal," + user.name + ",1,0";
                           application_channel.sink.add(xor_dec_enc(msg));
                           application_channel.sink.close();
                         } else {
                           application_channel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                              IOWebSocketChannel.connect("ws://${adr}:8820");
                           String msg = "Update Chal," + user.name + ",1,1";
                           application_channel.sink.add(xor_dec_enc(msg));
                           application_channel.sink.close();
@@ -401,13 +411,13 @@ class ChallengesState extends State<Challenges> {
                         change_chal(button_text2, visibility2, 2);
                         if (button_text2.toLowerCase() == "unfollow") {
                           application_channel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                              IOWebSocketChannel.connect("ws://${adr}:8820");
                           String msg = "Update Chal," + user.name + ",2,0";
                           application_channel.sink.add(xor_dec_enc(msg));
                           application_channel.sink.close();
                         } else {
                           application_channel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                              IOWebSocketChannel.connect("ws://${adr}:8820");
                           String msg = "Update Chal," + user.name + ",2,1";
                           application_channel.sink.add(xor_dec_enc(msg));
                           application_channel.sink.close();
@@ -424,6 +434,7 @@ class ChallengesState extends State<Challenges> {
       }
     } else if (user.challenge_two == true) {
       return Scaffold(
+        backgroundColor: Colors.teal,
         appBar: bar,
         body: Container(
           padding: EdgeInsets.all(16.0),
@@ -495,13 +506,13 @@ class ChallengesState extends State<Challenges> {
                       change_chal(button_text1, visibility1, 1);
                       if (button_text1.toLowerCase() == "unfollow") {
                         application_channel =
-                            IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                            IOWebSocketChannel.connect("ws://${adr}:8820");
                         String msg = "Update Chal," + user.name + ",1,0";
                         application_channel.sink.add(xor_dec_enc(msg));
                         application_channel.sink.close();
                       } else {
                         application_channel =
-                            IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                            IOWebSocketChannel.connect("ws://${adr}:8820");
                         String msg = "Update Chal," + user.name + ",1,1";
                         application_channel.sink.add(xor_dec_enc(msg));
                         application_channel.sink.close();
@@ -572,13 +583,13 @@ class ChallengesState extends State<Challenges> {
                       change_chal(text2, visibility4, 2);
                       if (text2.toLowerCase() == "unfollow") {
                         application_channel =
-                            IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                            IOWebSocketChannel.connect("ws://${adr}:8820");
                         String msg = "Update Chal," + user.name + ",2,0";
                         application_channel.sink.add(xor_dec_enc(msg));
                         application_channel.sink.close();
                       } else {
                         application_channel =
-                            IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                            IOWebSocketChannel.connect("ws://${adr}:8820");
                         String msg = "Update Chal," + user.name + ",2,1";
                         application_channel.sink.add(xor_dec_enc(msg));
                         application_channel.sink.close();
@@ -594,6 +605,7 @@ class ChallengesState extends State<Challenges> {
       );
     }
     return Scaffold(
+      backgroundColor: Colors.teal,
       appBar: bar,
       body: Container(
         padding: EdgeInsets.all(16.0),
@@ -665,13 +677,13 @@ class ChallengesState extends State<Challenges> {
                     change_chal(button_text1, visibility1, 1);
                     if (button_text1.toLowerCase() == "unfollow") {
                       application_channel =
-                          IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                          IOWebSocketChannel.connect("ws://${adr}:8820");
                       String msg = "Update Chal," + user.name + ",1,0";
                       application_channel.sink.add(xor_dec_enc(msg));
                       application_channel.sink.close();
                     } else {
                       application_channel =
-                          IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                          IOWebSocketChannel.connect("ws://${adr}:8820");
                       String msg = "Update Chal," + user.name + ",1,1";
                       application_channel.sink.add(xor_dec_enc(msg));
                       application_channel.sink.close();
@@ -742,13 +754,13 @@ class ChallengesState extends State<Challenges> {
                     change_chal(button_text2, visibility2, 2);
                     if (button_text2.toLowerCase() == "unfollow") {
                       application_channel =
-                          IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                          IOWebSocketChannel.connect("ws://${adr}:8820");
                       String msg = "Update Chal," + user.name + ",2,0";
                       application_channel.sink.add(xor_dec_enc(msg));
                       application_channel.sink.close();
                     } else {
                       application_channel =
-                          IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                          IOWebSocketChannel.connect("ws://${adr}:8820");
                       String msg = "Update Chal," + user.name + ",2,1";
                       application_channel.sink.add(xor_dec_enc(msg));
                       application_channel.sink.close();
