@@ -57,7 +57,11 @@ class WeightGraphState extends State<WeightGraph> {
         centerTitle: true,
         title: Text(
           'CaloCalc - Weight Graph',
-          style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 30.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.blue[500],
+          ),
         ),
         backgroundColor: Colors.green[800],
         automaticallyImplyLeading: false,

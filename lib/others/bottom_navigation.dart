@@ -10,8 +10,10 @@ import 'package:flutter/material.dart';
 
 class BottomNavi extends StatefulWidget {
   User un = User("", 0, 0, 0, 0, 0, "", "", "", "", 0, 0, 0, 0, 0, 0);
-  BottomNavi(User u2) {
+  var adr;
+  BottomNavi(User u2, var ad) {
     un = u2;
+    adr = ad;
   }
   @override
   NaviState createState() => NaviState();
@@ -20,19 +22,21 @@ class BottomNavi extends StatefulWidget {
 class NaviState extends State<BottomNavi> {
   User user = User("", 0, 0, 0, 0, 0, "", "", "", "", 0, 0, 0, 0, 0, 0);
   int _currentIndex = 0;
+  var adr;
   List _pages = [];
   @override
   void initState() {
     super.initState();
+    adr = widget.adr;
     user = widget.un;
     _pages = [
-      MyApp(user),
+      MyApp(user, adr),
       FoodData(user),
       WeightGraph(user),
-      Activities(user),
+      Activities(user, adr),
       TodaysActivitys(user),
-      Challenges(user),
-      AccountDetails(user)
+      Challenges(user, adr),
+      AccountDetails(user, adr)
     ];
   }
 
@@ -42,14 +46,14 @@ class NaviState extends State<BottomNavi> {
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.shifting,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.grey,
+        selectedItemColor: Colors.blue[500],
+        unselectedItemColor: Colors.white,
         currentIndex: _currentIndex,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
               icon: Icon(Icons.home),
               label: 'Main',
-              backgroundColor: Colors.lightBlue),
+              backgroundColor: Colors.lightBlue[300]),
           BottomNavigationBarItem(
             icon: Icon(Icons.food_bank_outlined),
             label: 'Food Data',

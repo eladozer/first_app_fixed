@@ -27,11 +27,16 @@ class TodaysActivityState extends State<TodaysActivitys> {
       activs.add(activ_dat[i]);
     }
     return Scaffold(
+      backgroundColor: Colors.green[700],
       appBar: AppBar(
         centerTitle: true,
         title: Text(
           'CaloCalc - My Activities',
-          style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 32.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.blue[500],
+          ),
         ),
         backgroundColor: Colors.green[800],
         automaticallyImplyLeading: false,

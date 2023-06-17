@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:first_app/others/user.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 
 String url = "https://api.api-ninjas.com/v1/nutrition?query=";
 var key = "Key1986";
@@ -16,8 +17,10 @@ String xor_dec_enc(String text) {
 
 class MyApp extends StatefulWidget {
   User u1 = User("", 0, 0, 0, 0, 0, "", "", "", "", 0, 0, 0, 0, 0, 0);
-  MyApp(User un) {
+  var adr;
+  MyApp(User un, var ad) {
     u1 = un;
+    adr = ad;
   }
   @override
   State<StatefulWidget> createState() {
@@ -27,6 +30,7 @@ class MyApp extends StatefulWidget {
 
 class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   User user = User("", 0, 0, 0, 0, 0, "", "", "", "", 0, 0, 0, 0, 0, 0);
+  var adr;
   var _mainChannel;
   var mealChannel;
   var meal_data;
@@ -35,6 +39,7 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     user = widget.u1;
+    adr = widget.adr;
     print("Entered Main");
   }
 
@@ -94,6 +99,7 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
       meals.add(meal_data[i]);
     }
     return Scaffold(
+      backgroundColor: Colors.teal,
       appBar: AppBar(
         leading: Stack(
           alignment: Alignment.center,
@@ -101,19 +107,25 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
             Container(
               height: 45,
               width: 45,
-              child: CircularProgressIndicator(
-                value: user.current_cal / user.cal,
-                valueColor: user.current_cal / user.cal >= 1
-                    ? AlwaysStoppedAnimation<Color>(Colors.green)
-                    : AlwaysStoppedAnimation(Colors.white),
-              ),
-            ),
-            Text(
-              'Calories',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 10.0,
-                fontWeight: FontWeight.bold,
+              child: CircularPercentIndicator(
+                animation: true,
+                percent: user.current_cal / user.cal >= 1
+                    ? 1
+                    : user.current_cal / user.cal,
+                radius: 22.5,
+                progressColor: user.current_cal / user.cal >= 1
+                    ? Colors.green
+                    : Colors.white,
+                circularStrokeCap: CircularStrokeCap.round,
+                lineWidth: 5,
+                center: Text(
+                  'Calories',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
           ],
@@ -125,19 +137,25 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
               Container(
                 height: 45,
                 width: 45,
-                child: CircularProgressIndicator(
-                  value: user.current_prot / user.prot,
-                  valueColor: user.current_prot / user.prot >= 1
-                      ? AlwaysStoppedAnimation<Color>(Colors.green)
-                      : AlwaysStoppedAnimation(Colors.white),
-                ),
-              ),
-              Text(
-                'Proteins',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 10.0,
-                  fontWeight: FontWeight.bold,
+                child: CircularPercentIndicator(
+                  animation: true,
+                  percent: user.current_prot / user.prot >= 1
+                      ? 1
+                      : user.current_prot / user.prot,
+                  radius: 22.5,
+                  progressColor: user.current_prot / user.prot >= 1
+                      ? Colors.green
+                      : Colors.white,
+                  circularStrokeCap: CircularStrokeCap.round,
+                  lineWidth: 5,
+                  center: Text(
+                    'Proteins',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -146,8 +164,13 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
         centerTitle: true,
         title: Text(
           'CaloCalc',
-          style: TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 40.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.blue[500],
+          ),
         ),
+        backgroundColor: Colors.lightBlue[300],
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -298,11 +321,14 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
       floatingActionButton: Align(
         alignment: Alignment.bottomCenter,
         child: FloatingActionButton(
-          child: Text('+', style: TextStyle(fontSize: 40.0)),
+          child: Text('+',
+              style: TextStyle(
+                fontSize: 40.0,
+                color: Colors.blue[500],
+              )),
           onPressed: () async {
             var mealPrompt = await openDialog();
             if (mealPrompt == null) {
-              return;
             } else {
               var list;
               if (mealPrompt == null) {
@@ -311,16 +337,26 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                 list = mealPrompt.split("and");
               }
               for (int i = 0; i < list.length; i++) {
-                mealChannel = IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                mealChannel = IOWebSocketChannel.connect("ws://${adr}:8820");
                 var item = list[i];
                 String changed = "";
-                if (item.split(" ")[0].contains("gr")) {
-                  changed = item.split(" ")[0].replaceAll("gr", "g") +
-                      " " +
-                      item.split(" ")[1];
+                if (item[0] != " ") {
+                  if (item.contains("gr")) {
+                    if (item.split(" ")[0].contains("gr")) {
+                      changed = item.split(" ")[0].replaceAll("gr", "g") +
+                          " " +
+                          item.split(" ")[1];
+                    } else {
+                      item = item.substring(1);
+                      if (item.split(" ")[0].contains("gr")) {
+                        changed = item.split(" ")[0].replaceAll("gr", "g") +
+                            " " +
+                            item.split(" ")[1];
+                      }
+                    }
+                    item = changed;
+                  }
                 }
-                print(changed);
-                item = changed;
                 if (item[0] == " ") {
                   String prompt = url + item.substring(1);
                   mealChannel.sink.add(xor_dec_enc(
@@ -360,7 +396,7 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                         "," +
                         newProt.toString();
                     _mainChannel =
-                        IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                        IOWebSocketChannel.connect("ws://${adr}:8820");
                     _mainChannel.sink.add(xor_dec_enc(message));
                     sub = _mainChannel.stream.listen(
                       (msg) {
@@ -390,7 +426,24 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                   },
                 );
               }
-              List weight_data_split = user.weight_data.split("/");
+            }
+          },
+          backgroundColor: Colors.lightBlue[300],
+        ),
+      ),
+    );
+  }
+
+  int find(int start, String str, String action) {
+    int i = start;
+    while (str[i] != action) {
+      i++;
+    }
+    return i;
+  }
+}
+
+/*List weight_data_split = user.weight_data.split("/");
               for (int j = 0; j < list.length; j++) {
                 List dat = list[j].split(" ");
                 var weight = dat[0];
@@ -425,18 +478,4 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                 },
               );
               _weightChan.sink.close();
-            }
-          },
-        ),
-      ),
-    );
-  }
-
-  int find(int start, String str, String action) {
-    int i = start;
-    while (str[i] != action) {
-      i++;
-    }
-    return i;
-  }
-}
+              */

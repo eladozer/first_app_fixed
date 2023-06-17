@@ -6,8 +6,10 @@ import 'package:first_app/others/encryption.dart';
 
 class Challenges extends StatefulWidget {
   User u1 = User("", 0, 0, 0, 0, 0, "", "", "", "", 0, 0, 0, 0, 0, 0);
-  Challenges(User u2) {
+  var adr;
+  Challenges(User u2, var ad) {
     u1 = u2;
+    adr = ad;
   }
   @override
   ChallengesState createState() => ChallengesState();
@@ -15,6 +17,7 @@ class Challenges extends StatefulWidget {
 
 class ChallengesState extends State<Challenges> {
   User user = User("", 0, 0, 0, 0, 0, "", "", "", "", 0, 0, 0, 0, 0, 0);
+  var adr;
   String button_text1 = "Follow";
   String button_text2 = "Follow";
   String text1 = "Unfollow";
@@ -28,56 +31,65 @@ class ChallengesState extends State<Challenges> {
     centerTitle: true,
     title: Text(
       'CaloCalc - Monthly Challenge',
-      style: TextStyle(fontSize: 27.0, fontWeight: FontWeight.bold),
+      style: TextStyle(
+        fontSize: 27.0,
+        fontWeight: FontWeight.bold,
+        color: Colors.blue[500],
+      ),
     ),
     backgroundColor: Colors.cyan,
     automaticallyImplyLeading: false,
   );
   List running = [
     '100 KM Running',
+    '125 KM Running',
+    '150 KM Running',
+    '175 KM Running',
     '200 KM Running',
+    '225 KM Running',
+    '250 KM Running',
+    '275 KM Running',
     '300 KM Running',
-    '400 KM Running',
-    '500 KM Running',
-    '600 KM Running',
-    '700 KM Running',
-    '800 KM Running',
-    '900 KM Running',
-    '1000 KM Running',
-    '1100 KM Running',
-    '1200 KM Running',
+    '325 KM Running',
+    '350 KM Running',
+    '375 KM Running',
   ];
   List cycling = [
     '100 KM Cycling',
+    '125 KM Cycling',
+    '150 KM Cycling',
+    '177 KM Cycling',
     '200 KM Cycling',
+    '225 KM Cycling',
+    '250 KM Cycling',
+    '275 KM Cycling',
     '300 KM Cycling',
-    '400 KM Cycling',
-    '500 KM Cycling',
-    '600 KM Cycling',
-    '700 KM Cycling',
-    '800 KM Cycling',
-    '900 KM Cycling',
-    '1000 KM Cycling',
-    '1100 KM Cycling',
-    '1200 KM Cycling',
+    '325 KM Cycling',
+    '350 KM Cycling',
+    '375 KM Cycling',
   ];
   @override
   void initState() {
     super.initState();
     user = widget.u1;
+    adr = widget.adr;
     print("Entered Challenges");
   }
 
   @override
   Widget build(BuildContext context) {
-    print(user.running.toString() + "," + user.cycling.toString());
     return data(user.challenge_one, user.challenge_two);
   }
 
   Scaffold data(var cond1, var cond2) {
+    var cyc_precent = user.cycling /
+        int.parse(cycling[DateTime.now().month - 1].toString().split(" ")[0]);
+    var run_precent = user.running /
+        int.parse(running[DateTime.now().month - 1].toString().split(" ")[0]);
     if (user.challenge_one == true) {
       if (user.challenge_two == true) {
         return Scaffold(
+          backgroundColor: Colors.teal,
           appBar: bar,
           body: Container(
             padding: EdgeInsets.all(16.0),
@@ -88,158 +100,169 @@ class ChallengesState extends State<Challenges> {
               ),
               borderRadius: BorderRadius.circular(8.0),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  running[DateTime.now().month - 1].toString(),
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    running[DateTime.now().month - 1].toString(),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.0,
+                    ),
                   ),
-                ),
-                SizedBox(height: 16.0),
-                Text(
-                  'You Have All Month To Reach ${int.parse(running[DateTime.now().month - 1].toString().split(" ")[0])} KMS',
-                  style: TextStyle(
-                    fontSize: 16.0,
+                  SizedBox(height: 16.0),
+                  Text(
+                    'You Have All Month To Reach ${int.parse(running[DateTime.now().month - 1].toString().split(" ")[0])} KMS',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                    ),
                   ),
-                ),
-                Visibility(
-                  visible: visibility3,
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: CircularPercentIndicator(
-                      radius: 40.0,
-                      lineWidth: 8.0,
-                      percent: user.running /
-                          int.parse(running[DateTime.now().month - 1]
-                              .toString()
-                              .split(" ")[0]),
-                      center: new Text(
-                        (user.running /
-                                    int.parse(running[DateTime.now().month - 1]
-                                        .toString()
-                                        .split(" ")[0]))
-                                .toString() +
-                            "%",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15.0,
+                  Visibility(
+                    visible: visibility3,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: CircularPercentIndicator(
+                        animation: true,
+                        radius: 40.0,
+                        lineWidth: 8.0,
+                        percent: run_precent >= 1 ? 1 : run_precent,
+                        center: run_precent >= 1
+                            ? Text(
+                                "100%",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15.0,
+                                ),
+                              )
+                            : Text(
+                                (run_precent * 100).toInt().toString() + "%",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15.0,
+                                ),
+                              ),
+                        progressColor: run_precent >= 1
+                            ? Color.fromARGB(255, 12, 193, 18)
+                            : Colors.cyan,
+                        circularStrokeCap: CircularStrokeCap.round,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Colors.cyan), // Set the desired color here
                         ),
+                        onPressed: () {
+                          change_chal(text1, visibility3, 1);
+                          if (text1.toLowerCase() == "unfollow") {
+                            application_channel =
+                                IOWebSocketChannel.connect("ws://${adr}:8820");
+                            String msg = "Update Chal," + user.name + ",1,0";
+                            application_channel.sink.add(xor_dec_enc(msg));
+                            application_channel.sink.close();
+                          } else {
+                            application_channel =
+                                IOWebSocketChannel.connect("ws://${adr}:8820");
+                            String msg = "Update Chal," + user.name + ",1,1";
+                            application_channel.sink.add(xor_dec_enc(msg));
+                            application_channel.sink.close();
+                          }
+                        },
+                        child: Text(text1),
                       ),
-                      progressColor: Colors.blue,
+                    ],
+                  ),
+                  SizedBox(
+                    height: 150,
+                  ),
+                  Text(
+                    cycling[DateTime.now().month - 1].toString(),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.0,
                     ),
                   ),
-                ),
-                SizedBox(height: 16.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            Colors.cyan), // Set the desired color here
-                      ),
-                      onPressed: () {
-                        change_chal(text1, visibility3, 1);
-                        if (text1.toLowerCase() == "unfollow") {
-                          application_channel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
-                          String msg = "Update Chal," + user.name + ",1,0";
-                          application_channel.sink.add(xor_dec_enc(msg));
-                          application_channel.sink.close();
-                        } else {
-                          application_channel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
-                          String msg = "Update Chal," + user.name + ",1,1";
-                          application_channel.sink.add(xor_dec_enc(msg));
-                          application_channel.sink.close();
-                        }
-                      },
-                      child: Text(text1),
+                  SizedBox(height: 16.0),
+                  Text(
+                    'You Have All Month To Reach ${int.parse(cycling[DateTime.now().month - 1].toString().split(" ")[0])} KMS',
+                    style: TextStyle(
+                      fontSize: 16.0,
                     ),
-                  ],
-                ),
-                SizedBox(
-                  height: 150,
-                ),
-                Text(
-                  cycling[DateTime.now().month - 1].toString(),
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
                   ),
-                ),
-                SizedBox(height: 16.0),
-                Text(
-                  'You Have All Month To Reach ${int.parse(cycling[DateTime.now().month - 1].toString().split(" ")[0])} KMS',
-                  style: TextStyle(
-                    fontSize: 16.0,
+                  Visibility(
+                    visible: visibility4,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: CircularPercentIndicator(
+                        animation: true,
+                        radius: 40.0,
+                        lineWidth: 8.0,
+                        percent: cyc_precent >= 1 ? 1 : cyc_precent,
+                        center: cyc_precent >= 1
+                            ? Text(
+                                "100%",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15.0,
+                                ),
+                              )
+                            : Text(
+                                (cyc_precent * 100).toInt().toString() + "%",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15.0,
+                                ),
+                              ),
+                        progressColor: cyc_precent >= 1
+                            ? Color.fromARGB(255, 12, 193, 18)
+                            : Colors.cyan,
+                        circularStrokeCap: CircularStrokeCap.round,
+                      ),
+                    ),
                   ),
-                ),
-                Visibility(
-                  visible: visibility4,
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: CircularPercentIndicator(
-                      radius: 40.0,
-                      lineWidth: 8.0,
-                      percent: user.cycling /
-                          int.parse(cycling[DateTime.now().month - 1]
-                              .toString()
-                              .split(" ")[0]),
-                      center: new Text(
-                        (user.cycling /
-                                    int.parse(cycling[DateTime.now().month - 1]
-                                        .toString()
-                                        .split(" ")[0]))
-                                .toString() +
-                            "%",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15.0,
+                  SizedBox(height: 16.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Colors.cyan), // Set the desired color here
                         ),
+                        onPressed: () {
+                          change_chal(text2, visibility4, 2);
+                          if (text2.toLowerCase() == "unfollow") {
+                            application_channel =
+                                IOWebSocketChannel.connect("ws://${adr}:8820");
+                            String msg = "Update Chal," + user.name + ",2,0";
+                            application_channel.sink.add(xor_dec_enc(msg));
+                            application_channel.sink.close();
+                          } else {
+                            application_channel =
+                                IOWebSocketChannel.connect("ws://${adr}:8820");
+                            String msg = "Update Chal," + user.name + ",2,1";
+                            application_channel.sink.add(xor_dec_enc(msg));
+                            application_channel.sink.close();
+                          }
+                        },
+                        child: Text(text2),
                       ),
-                      progressColor: Colors.blue,
-                    ),
+                    ],
                   ),
-                ),
-                SizedBox(height: 16.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            Colors.cyan), // Set the desired color here
-                      ),
-                      onPressed: () {
-                        change_chal(text2, visibility4, 2);
-                        if (text2.toLowerCase() == "unfollow") {
-                          application_channel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
-                          String msg = "Update Chal," + user.name + ",2,0";
-                          application_channel.sink.add(xor_dec_enc(msg));
-                          application_channel.sink.close();
-                        } else {
-                          application_channel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
-                          String msg = "Update Chal," + user.name + ",2,1";
-                          application_channel.sink.add(xor_dec_enc(msg));
-                          application_channel.sink.close();
-                        }
-                      },
-                      child: Text(text2),
-                    ),
-                  ],
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );
       } else {
         return Scaffold(
+          backgroundColor: Colors.teal,
           appBar: bar,
           body: Container(
             padding: EdgeInsets.all(16.0),
@@ -272,25 +295,29 @@ class ChallengesState extends State<Challenges> {
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: CircularPercentIndicator(
+                      animation: true,
                       radius: 40.0,
                       lineWidth: 8.0,
-                      percent: user.running /
-                          int.parse(running[DateTime.now().month - 1]
-                              .toString()
-                              .split(" ")[0]),
-                      center: new Text(
-                        (user.running /
-                                    int.parse(running[DateTime.now().month - 1]
-                                        .toString()
-                                        .split(" ")[0]))
-                                .toString() +
-                            "%",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15.0,
-                        ),
-                      ),
-                      progressColor: Colors.blue,
+                      percent: run_precent >= 1 ? 1 : run_precent,
+                      center: run_precent >= 1
+                          ? Text(
+                              "100%",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15.0,
+                              ),
+                            )
+                          : Text(
+                              (run_precent * 100).toInt().toString() + "%",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15.0,
+                              ),
+                            ),
+                      progressColor: run_precent >= 1
+                          ? Color.fromARGB(255, 12, 193, 18)
+                          : Colors.cyan,
+                      circularStrokeCap: CircularStrokeCap.round,
                     ),
                   ),
                 ),
@@ -307,13 +334,13 @@ class ChallengesState extends State<Challenges> {
                         change_chal(text1, visibility3, 1);
                         if (text1.toLowerCase() == "unfollow") {
                           application_channel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                              IOWebSocketChannel.connect("ws://${adr}:8820");
                           String msg = "Update Chal," + user.name + ",1,0";
                           application_channel.sink.add(xor_dec_enc(msg));
                           application_channel.sink.close();
                         } else {
                           application_channel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                              IOWebSocketChannel.connect("ws://${adr}:8820");
                           String msg = "Update Chal," + user.name + ",1,1";
                           application_channel.sink.add(xor_dec_enc(msg));
                           application_channel.sink.close();
@@ -345,25 +372,29 @@ class ChallengesState extends State<Challenges> {
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: CircularPercentIndicator(
+                      animation: true,
                       radius: 40.0,
                       lineWidth: 8.0,
-                      percent: user.cycling /
-                          int.parse(cycling[DateTime.now().month - 1]
-                              .toString()
-                              .split(" ")[0]),
-                      center: new Text(
-                        (user.cycling /
-                                    int.parse(cycling[DateTime.now().month - 1]
-                                        .toString()
-                                        .split(" ")[0]))
-                                .toString() +
-                            "%",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15.0,
-                        ),
-                      ),
-                      progressColor: Colors.blue,
+                      percent: cyc_precent >= 1 ? 1 : cyc_precent,
+                      center: cyc_precent >= 1
+                          ? Text(
+                              "100%",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15.0,
+                              ),
+                            )
+                          : Text(
+                              (cyc_precent * 100).toInt().toString() + "%",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15.0,
+                              ),
+                            ),
+                      progressColor: cyc_precent >= 1
+                          ? Color.fromARGB(255, 12, 193, 18)
+                          : Colors.cyan,
+                      circularStrokeCap: CircularStrokeCap.round,
                     ),
                   ),
                 ),
@@ -380,13 +411,13 @@ class ChallengesState extends State<Challenges> {
                         change_chal(button_text2, visibility2, 2);
                         if (button_text2.toLowerCase() == "unfollow") {
                           application_channel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                              IOWebSocketChannel.connect("ws://${adr}:8820");
                           String msg = "Update Chal," + user.name + ",2,0";
                           application_channel.sink.add(xor_dec_enc(msg));
                           application_channel.sink.close();
                         } else {
                           application_channel =
-                              IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                              IOWebSocketChannel.connect("ws://${adr}:8820");
                           String msg = "Update Chal," + user.name + ",2,1";
                           application_channel.sink.add(xor_dec_enc(msg));
                           application_channel.sink.close();
@@ -403,6 +434,7 @@ class ChallengesState extends State<Challenges> {
       }
     } else if (user.challenge_two == true) {
       return Scaffold(
+        backgroundColor: Colors.teal,
         appBar: bar,
         body: Container(
           padding: EdgeInsets.all(16.0),
@@ -435,25 +467,29 @@ class ChallengesState extends State<Challenges> {
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: CircularPercentIndicator(
+                    animation: true,
                     radius: 40.0,
                     lineWidth: 8.0,
-                    percent: user.running /
-                        int.parse(running[DateTime.now().month - 1]
-                            .toString()
-                            .split(" ")[0]),
-                    center: new Text(
-                      (user.running /
-                                  int.parse(running[DateTime.now().month - 1]
-                                      .toString()
-                                      .split(" ")[0]))
-                              .toString() +
-                          "%",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15.0,
-                      ),
-                    ),
-                    progressColor: Colors.blue,
+                    percent: run_precent >= 1 ? 1 : run_precent,
+                    center: run_precent >= 1
+                        ? Text(
+                            "100%",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15.0,
+                            ),
+                          )
+                        : Text(
+                            (run_precent * 100).toInt().toString() + "%",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15.0,
+                            ),
+                          ),
+                    progressColor: run_precent >= 1
+                        ? Color.fromARGB(255, 12, 193, 18)
+                        : Colors.cyan,
+                    circularStrokeCap: CircularStrokeCap.round,
                   ),
                 ),
               ),
@@ -470,13 +506,13 @@ class ChallengesState extends State<Challenges> {
                       change_chal(button_text1, visibility1, 1);
                       if (button_text1.toLowerCase() == "unfollow") {
                         application_channel =
-                            IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                            IOWebSocketChannel.connect("ws://${adr}:8820");
                         String msg = "Update Chal," + user.name + ",1,0";
                         application_channel.sink.add(xor_dec_enc(msg));
                         application_channel.sink.close();
                       } else {
                         application_channel =
-                            IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                            IOWebSocketChannel.connect("ws://${adr}:8820");
                         String msg = "Update Chal," + user.name + ",1,1";
                         application_channel.sink.add(xor_dec_enc(msg));
                         application_channel.sink.close();
@@ -508,25 +544,29 @@ class ChallengesState extends State<Challenges> {
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: CircularPercentIndicator(
+                    animation: true,
                     radius: 40.0,
                     lineWidth: 8.0,
-                    percent: user.cycling /
-                        int.parse(cycling[DateTime.now().month - 1]
-                            .toString()
-                            .split(" ")[0]),
-                    center: new Text(
-                      (user.cycling /
-                                  int.parse(cycling[DateTime.now().month - 1]
-                                      .toString()
-                                      .split(" ")[0]))
-                              .toString() +
-                          "%",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15.0,
-                      ),
-                    ),
-                    progressColor: Colors.blue,
+                    percent: cyc_precent >= 1 ? 1 : cyc_precent,
+                    center: cyc_precent >= 1
+                        ? Text(
+                            "100%",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15.0,
+                            ),
+                          )
+                        : Text(
+                            (cyc_precent * 100).toInt().toString() + "%",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15.0,
+                            ),
+                          ),
+                    progressColor: cyc_precent >= 1
+                        ? Color.fromARGB(255, 12, 193, 18)
+                        : Colors.cyan,
+                    circularStrokeCap: CircularStrokeCap.round,
                   ),
                 ),
               ),
@@ -543,13 +583,13 @@ class ChallengesState extends State<Challenges> {
                       change_chal(text2, visibility4, 2);
                       if (text2.toLowerCase() == "unfollow") {
                         application_channel =
-                            IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                            IOWebSocketChannel.connect("ws://${adr}:8820");
                         String msg = "Update Chal," + user.name + ",2,0";
                         application_channel.sink.add(xor_dec_enc(msg));
                         application_channel.sink.close();
                       } else {
                         application_channel =
-                            IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                            IOWebSocketChannel.connect("ws://${adr}:8820");
                         String msg = "Update Chal," + user.name + ",2,1";
                         application_channel.sink.add(xor_dec_enc(msg));
                         application_channel.sink.close();
@@ -565,6 +605,7 @@ class ChallengesState extends State<Challenges> {
       );
     }
     return Scaffold(
+      backgroundColor: Colors.teal,
       appBar: bar,
       body: Container(
         padding: EdgeInsets.all(16.0),
@@ -597,25 +638,29 @@ class ChallengesState extends State<Challenges> {
               child: Align(
                 alignment: Alignment.centerRight,
                 child: CircularPercentIndicator(
+                  animation: true,
                   radius: 40.0,
                   lineWidth: 8.0,
-                  percent: user.running /
-                      int.parse(running[DateTime.now().month - 1]
-                          .toString()
-                          .split(" ")[0]),
-                  center: new Text(
-                    (user.running /
-                                int.parse(running[DateTime.now().month - 1]
-                                    .toString()
-                                    .split(" ")[0]))
-                            .toString() +
-                        "%",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15.0,
-                    ),
-                  ),
-                  progressColor: Colors.blue,
+                  percent: run_precent >= 1 ? 1 : run_precent,
+                  center: run_precent >= 1
+                      ? Text(
+                          "100%",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15.0,
+                          ),
+                        )
+                      : Text(
+                          (run_precent * 100).toInt().toString() + "%",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15.0,
+                          ),
+                        ),
+                  progressColor: run_precent >= 1
+                      ? Color.fromARGB(255, 12, 193, 18)
+                      : Colors.cyan,
+                  circularStrokeCap: CircularStrokeCap.round,
                 ),
               ),
             ),
@@ -632,13 +677,13 @@ class ChallengesState extends State<Challenges> {
                     change_chal(button_text1, visibility1, 1);
                     if (button_text1.toLowerCase() == "unfollow") {
                       application_channel =
-                          IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                          IOWebSocketChannel.connect("ws://${adr}:8820");
                       String msg = "Update Chal," + user.name + ",1,0";
                       application_channel.sink.add(xor_dec_enc(msg));
                       application_channel.sink.close();
                     } else {
                       application_channel =
-                          IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                          IOWebSocketChannel.connect("ws://${adr}:8820");
                       String msg = "Update Chal," + user.name + ",1,1";
                       application_channel.sink.add(xor_dec_enc(msg));
                       application_channel.sink.close();
@@ -670,25 +715,29 @@ class ChallengesState extends State<Challenges> {
               child: Align(
                 alignment: Alignment.centerRight,
                 child: CircularPercentIndicator(
+                  animation: true,
                   radius: 40.0,
                   lineWidth: 8.0,
-                  percent: user.cycling /
-                      int.parse(cycling[DateTime.now().month - 1]
-                          .toString()
-                          .split(" ")[0]),
-                  center: new Text(
-                    (user.cycling /
-                                int.parse(cycling[DateTime.now().month - 1]
-                                    .toString()
-                                    .split(" ")[0]))
-                            .toString() +
-                        "%",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15.0,
-                    ),
-                  ),
-                  progressColor: Colors.blue,
+                  percent: cyc_precent >= 1 ? 1 : cyc_precent,
+                  center: cyc_precent >= 1
+                      ? Text(
+                          "100%",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15.0,
+                          ),
+                        )
+                      : Text(
+                          (cyc_precent * 100).toInt().toString() + "%",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15.0,
+                          ),
+                        ),
+                  progressColor: cyc_precent >= 1
+                      ? Color.fromARGB(255, 12, 193, 18)
+                      : Colors.cyan,
+                  circularStrokeCap: CircularStrokeCap.round,
                 ),
               ),
             ),
@@ -705,13 +754,13 @@ class ChallengesState extends State<Challenges> {
                     change_chal(button_text2, visibility2, 2);
                     if (button_text2.toLowerCase() == "unfollow") {
                       application_channel =
-                          IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                          IOWebSocketChannel.connect("ws://${adr}:8820");
                       String msg = "Update Chal," + user.name + ",2,0";
                       application_channel.sink.add(xor_dec_enc(msg));
                       application_channel.sink.close();
                     } else {
                       application_channel =
-                          IOWebSocketChannel.connect("ws://10.0.0.8:8820");
+                          IOWebSocketChannel.connect("ws://${adr}:8820");
                       String msg = "Update Chal," + user.name + ",2,1";
                       application_channel.sink.add(xor_dec_enc(msg));
                       application_channel.sink.close();

@@ -948,8 +948,8 @@ class RegState extends State<Register> {
                           int.parse(ctrl2.text) == 0 ||
                           int.parse(ctrl1.text) == 0) {
                       } else {
-                        _regChannel = IOWebSocketChannel.connect(
-                            "ws://192.168.7.91:8820");
+                        _regChannel =
+                            IOWebSocketChannel.connect("ws://10.0.0.8:8820");
                         String message =
                             "Register,${control.text},${ctrl.text},${cntl.text},${control2.text},${ctrl2.text},${ctrl1.text}";
                         _regChannel.sink.add(message);

@@ -1,11 +1,11 @@
 "Activity, Exercise or Sport (1 hour)",130 lb,155 lb,180 lb,205 lb,Calories per kg
 "Cycling, mountain bike, bmx",502,598,695,791,1.750729719
-"Cycling, <10 mph, leisure bicycling",236,281,327,372,0.82323563
-"Cycling, >20 mph, racing",944,1126,1308,1489,3.294973528
-"Cycling, 10-11.9 mph, light",354,422,490,558,1.234853445
-"Cycling, 12-13.9 mph, moderate",472,563,654,745,1.647825266
-"Cycling, 14-15.9 mph, vigorous",590,704,817,931,2.059443081
-"Cycling, 16-19 mph, very fast, racing",708,844,981,1117,2.471060896
+"Cycling, <16 kmh, leisure bicycling",236,281,327,372,0.82323563
+"Cycling, >32 kmh, racing",944,1126,1308,1489,3.294973528
+"Cycling, 16-19.2 kmh, light",354,422,490,558,1.234853445
+"Cycling, 19.2-22.4 kmh, moderate",472,563,654,745,1.647825266
+"Cycling, 22.4-25.6 kmh, vigorous",590,704,817,931,2.059443081
+"Cycling, 25.6-30.4 kmh, very fast, racing",708,844,981,1117,2.471060896
 Unicycling,295,352,409,465,1.02972154
 "Stationary cycling, very light",177,211,245,279,0.617426722
 "Stationary cycling, light",325,387,449,512,1.132625994
@@ -36,17 +36,17 @@ Water aerobics,236,281,327,372,0.82323563
 "Ballet, twist, jazz, tap",266,317,368,419,0.92749409
 "Ballroom dancing, slow",177,211,245,279,0.617426722
 "Ballroom dancing, fast",325,387,449,512,1.132625994
-"Running, 5 mph (12 minute mile)",472,563,654,745,1.647825266
-"Running, 5.2 mph (11.5 minute mile)",531,633,735,838,1.85295717
-"Running, 6 mph (10 min mile)",590,704,817,931,2.059443081
-"Running, 6.7 mph (9 min mile)",649,774,899,1024,2.265251988
-"Running, 7 mph (8.5 min mile)",679,809,940,1070,2.368156442
-"Running, 7.5 mph (8 min mile)",738,880,1022,1163,2.574642352
-"Running, 8 mph (7.5 min mile)",797,950,1103,1256,2.779774257
-"Running, 8.6 mph (7 min mile)",826,985,1144,1303,2.88267871
-"Running, 9 mph (6.5 min mile)",885,1056,1226,1396,3.089164621
-"Running, 10 mph (6 min mile)",944,1126,1308,1489,3.294973528
-"Running, 10.9 mph (5.5 min mile)",1062,1267,1471,1675,3.706591343
+"Running, 8 kmh ",472,563,654,745,1.647825266
+"Running, 8.3 kmh ",531,633,735,838,1.85295717
+"Running, 9.6 kmh ",590,704,817,931,2.059443081
+"Running, 10.7 kmh ",649,774,899,1024,2.265251988
+"Running, 11.2 kmh ",679,809,940,1070,2.368156442
+"Running, 12 kmh ",738,880,1022,1163,2.574642352
+"Running, 12.8 kmh ",797,950,1103,1256,2.779774257
+"Running, 13.7 kmh ",826,985,1144,1303,2.88267871
+"Running, 14.4 kmh ",885,1056,1226,1396,3.089164621
+"Running, 16 kmh ",944,1126,1308,1489,3.294973528
+"Running, 17.6 kmh ",1062,1267,1471,1675,3.706591343
 "Running, cross country",531,633,735,838,1.85295717
 "Running, general",472,563,654,745,1.647825266
 "Running, on a track, team practice",590,704,817,931,2.059443081
@@ -165,15 +165,15 @@ Race walking,384,457,531,605,1.338434901
 "Rock climbing, mountain climbing",472,563,654,745,1.647825266
 Walking using crutches,295,352,409,465,1.02972154
 Walking the dog,177,211,245,279,0.617426722
-"Walking, under 2.0 mph, very slow",118,141,163,186,0.411617815
-"Walking, 2.0 mph, slow",148,176,204,233,0.515199272
-Walking, 2.5 mph,177,211,245,279,0.617426722
-"Walking, 3.0 mph, moderate",195,232,270,307,0.679710997
-"Walking, 3.5 mph, brisk pace",224,267,311,354,0.782615451
-"Walking, 3.5 mph, uphill",354,422,490,558,1.234853445
-"Walking, 4.0 mph, very brisk",295,352,409,465,1.02972154
-Walking, 4.5 mph,372,443,515,586,1.297137719
-Walking, 5.0 mph,472,563,654,745,1.647825266
+"Walking, under 3 kmh, very slow",118,141,163,186,0.411617815
+"Walking, 3.2 kmh, slow",148,176,204,233,0.515199272
+Walking, 4 kmh,177,211,245,279,0.617426722
+"Walking, 5 kmh, moderate",195,232,270,307,0.679710997
+"Walking, 5.6 kmh, brisk pace",224,267,311,354,0.782615451
+"Walking, 5.6 kmh, uphill",354,422,490,558,1.234853445
+"Walking, 6.4 kmh, very brisk",295,352,409,465,1.02972154
+Walking, 7.2 kmh,372,443,515,586,1.297137719
+Walking, 8 kmh,472,563,654,745,1.647825266
 "Boating, power, speed boat",148,176,204,233,0.515199272
 "Canoeing, camping trip",236,281,327,372,0.82323563
 "Canoeing, rowing, light",177,211,245,279,0.617426722
@@ -208,7 +208,7 @@ Water polo,590,704,817,931,2.059443081
 Water volleyball,177,211,245,279,0.617426722
 Water jogging,472,563,654,745,1.647825266
 "Diving, springboard or platform",177,211,245,279,0.617426722
-"Ice skating, < 9 mph",325,387,449,512,1.132625994
+"Ice skating, < 14.4 kmh",325,387,449,512,1.132625994
 "Ice skating, average speed",413,493,572,651,1.441339355
 "Ice skating, rapidly",531,633,735,838,1.85295717
 "Speed skating, ice, competitive",885,1056,1226,1396,3.089164621
